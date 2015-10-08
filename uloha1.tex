@@ -1,0 +1,118 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{ifthen}
+
+\newcommand{\task}[2]{\par \noindent \textbf{{#1}.} \hspace{3pt} #2 \vspace{10pt}}
+\newcommand{\solution}{\vspace{10pt}}
+\newcommand{\pipesep}{\hspace{3pt} \vert \hspace{3pt}}
+
+\newenvironment{subtasklist}[0]{\begin{enumerate}[label=(\alph*)]}{\end{enumerate}}
+\newenvironment{mysolution}[1]{
+    \par \textbf{Riešenie} \newline
+    \ifthenelse{\equal{#1}{subtasks}}{\begin{enumerate}[label=(\alph*)]}
+            {\begin{enumerate}[label={}] \item}
+}{\end{enumerate} \newpage}
+\newcommand{\subtask}{\item}
+ 
+\begin{document}
+ 
+\title{TIN 2015/2016: Úloha 1}
+\author{Marek Milkovič}
+\maketitle
+
+\task{1}{Uvažujte jazyk $L_{1} = \{a^{i}b^{j}c^{i}d^{k} \pipesep i,j,k \ge 0\}$.
+    \begin{subtasklist}
+            \subtask Zostavte gramatiku $G_{1}$ takú, že $L(G_{1}) = L_{1}$.
+            \subtask Akého typu (podľa Chomského hierachie jazykov) je $G_{1}$ a akého typu
+            je $L_{1}$? Môžu sa tieto typy všeobecne líšiť? Svoje tvrdenie zdôvodnite
+            (formálny dôkaz nie je požadovaný).
+    \end{subtasklist}}
+
+\begin{mysolution}{subtasks}
+\subtask % (a)
+\begin{flalign*}
+    G_{1} = (&N, \Sigma, P, S) &\\[5pt]
+    N &= \{S, A, B, D\} &\\
+    \Sigma &= \{\texttt{a}, \texttt{b}, \texttt{c}\} &\\
+    P&: \\
+    &S \to A D &\\
+    &A \to \texttt{a} A \texttt{c} \pipesep B \pipesep \varepsilon &\\
+    &B \to \texttt{b} B \pipesep \varepsilon &\\
+    &D \to \texttt{d} D \pipesep \varepsilon &
+\end{flalign*}
+
+\subtask % (b)
+Gramatika $G_{1}$ je typu 2 z dôvodu tvaru prepisovacích pravidiel.
+Tie odpovedajú tvaru $A \to \alpha$ kde $A \in N, \alpha \in (N \cup \Sigma)^{*}$.
+
+Jazyk $L_{1}$ môže byť typu 2 či 3. To vyplýva z toho, že gramatika typu $n$ môže generovať jazyk
+typu $n$ a vyšší. Je teda potrebné dokázať, o aký jazyk sa jedná pomocou pumping lemma pre
+regulárne jazyky. Predpokladajme, že $L_{1}$ je nekonečný regulárny jazyk (typu~3).
+Potom $\exists p > 0$ také, že platí
+\begin{equation*}
+    w \in L_{1} \land \vert w \vert \ge p \Rightarrow
+    w = xyz \land y \ne \varepsilon
+        \land \vert xy \vert \le p
+        \land xy^{i}z \in L_{1}\ \text{pre}\ i \ge 0
+\end{equation*}
+Nech reťazec $w$ je generovaný ako $a^{p}b^{j}c^{p}d^{k}$. Pokiaľ platí, že $\vert xy \vert \le p$,
+potom môžeme povedať, že reťazec $xy$ pozostáva len zo znakov $a$. Môžeme teda zapísať, že
+$xy^{i}z = a^{p + (i - 1)\vert y \vert}b^{j}c^{p}d^{k}$. Pre $i = 0$ teda platí, že
+$xy^{0}z = a^{p - \vert y \vert}b^{j}c^{p}d^{k}$. Avšak $xy^{0}z \not\in L_{1}$ pretože
+$\#_{a} \neq \#_{c}$. Dospeli sme ku sporu. Pôvodný predpoklad, že jazyk $L_{1}$ je regulárny
+(typu~3) je teda taktiež neplatný. Jazyk $L_{1}$ teda musí byť typu 2.
+
+Typ gramatiky a typ jazyka sa môže všeobecne líšiť. Z definície tried Chomského hierarchie jazykov plynie
+
+\begin{equation*}
+    \mathcal{L}_{3} \subseteq \mathcal{L}_{2} \subseteq \mathcal{L}_{1} \subseteq \mathcal{L}_{0}
+\end{equation*}
+
+kde $\mathcal{L}_{i}$ je trieda všetkých jazykov typu $i$. Gramatiky typu $i$ sú tým pádom
+schopné generovať jazyky typu $i$ a vyššie, pretože sa jedná len o podmnožiny z triedy
+jazykov typu $i$.
+\end{mysolution}
+
+\task{3}{Uvažujte NKA $M_{3}$ nad abecedou $\Sigma = \{a, b, c\}$ z obrázku 1: \\
+    K tomuto automatu zostrojte sústavu rovníc nad regulárnymi výrazmi a jej riešením zostavte
+ekvivalentný regulárny výraz.}
+\begin{mysolution}
+
+\vspace{-40pt}
+\begin{flalign*}
+    X =&\ aY & \\
+    Y =&\ cX + cY + bZ & \\
+    Z =&\ bX + aY + \varepsilon &
+\end{flalign*}
+Dosadíme za $Z$ do rovnice číslo 2. Dostávame sústavu
+\begin{flalign*}
+    X =&\ aY & \\
+    Y =&\ cX + cY + bZ & \\
+      =&\ cX + cY + b(bX + aY + \varepsilon) & \\
+      =&\ cX + cY + bbX + baY + b & \\
+      =&\ (c + ba)Y + (c + bb)X + b & \\
+      =&\ (c + ba)^{*}((c + bb)X + b) &
+\end{flalign*}
+Rovnicu číslo 2 sme upravili do tvaru najmenšieho pevného bodu podľa Vety 2.3, ktorá hovorí, že
+najmenším pevným bodom rovnice v tvare $X = pX + q$ je $X = p^{*}q$.
+
+Za $Y$ následne dosadíme do rovnice číslo 1 a získame tak 1 rovnicu, ktorú znova upravíme do
+tvaru najmenšieho pevného bodu.
+\begin{flalign*}
+    X =&\ aY & \\
+      =&\ a(c + ba)^{*}((c + bb)X + b) & \\
+      =&\ a(c + ba)^{*}(c + bb)X + a(c + ba)^{*}b & \\
+      =&\ (a(c + ba)^{*}(c + bb))^{*}a(c + ba)^{*}b &
+\end{flalign*}
+Nakoľko $X$ znači počiatočný stav NKA $M_{3}$, tak sa jedná o ekvivalentný regulárny výraz
+značiaci rovnaký jazyk, ako je príjmaný jazyk $L(M_{3})$.
+
+
+\end{mysolution}
+
+\end{document}
