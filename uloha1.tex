@@ -448,10 +448,11 @@ jazykov typu $i$.
     Jednotlivé stavy RKA $M_{2}$ boli pomenované prirodzenými číslami. Ďalej budeme postupovať
     podla Algoritmu 3.6 zo študíjnej opory na prevod RKA $M_{2}$ na DKA $M_{D}$, ktorý
     zadefinujeme ako $(Q_{D}, \Sigma, \delta_{D}, q^{0}_{D}, F_{D})$. Z dôvodu prehladnosti
-    nie sú uvedené tie prechody, u ktorých je výsledkom $\{\varnothing\}$.
+    nie sú uvedené tie prechody, u ktorých je výsledkom $\varnothing$.
     \begin{flalign*}
         &q^{0}_{D} = \varepsilon\text{-uzáver}(1)
             = \{1, 2, 8, 9, 10, 12, 13, 14, 15, 16, 22\} = A & \\
+                                                             & \\
         &\delta_{D}(A, a) = \varepsilon\text{-uzáver}(\{3, 11, 17\})
             = \{3, 4, 11, 14, 15, 16, 17, 18, 22\} = B & \\
         &\delta_{D}(B, a) = \varepsilon\text{-uzáver}(\{17\}) = \{17, 18\} = C & \\
@@ -465,6 +466,9 @@ jazykov typu $i$.
        &\delta_{D}(F, a) = \varepsilon\text{-uzáver}(\{3, 11, 17\})
             = \{3, 4, 11, 14, 15, 16, 17, 18, 22\} = B & \\
         &\delta_{D}(G, a) = \varepsilon\text{-uzáver}(\{17\}) = \{17, 18\} = C & \\
+        & \\
+        &Q_{D} = \{A, B, C, D, E, F, G\} & \\
+        &F_{D} = \{A, B, F, G\}
     \end{flalign*}
 
     \begin{figure}[!h]
@@ -484,9 +488,177 @@ jazykov typu $i$.
             \path (c) edge node[above]{$b$} (e);
             \path (d) edge node[above]{$c$} (f);
             \path (e) edge node[above]{$c$} (g);
-            \path (f) edge[bend right=60] node[above]{$a$} (b);
-            \path (g) edge[bend left=60] node[below]{$a$} (c);
+            \path (f) edge[bend right=40] node[above]{$a$} (b);
+            \path (g) edge[bend left=40] node[below]{$a$} (c);
         \end{tikzpicture}
+        \caption{DKA $M_{D}$.}
+    \end{figure}
+
+    Aby sme mohli DKA minimalizovať, je potrebné najskôr vykonať niekoľko krokov. Najprv musíme
+    DKA $M_{D}$ transformovať na úplný DKA $M_{U}$ doplnením tzv \emph{sink} stavu, tak aby platilo, že
+    $\delta_{D}$ je totálnou funkciou na $Q \times \Sigma$.
+
+    \newpage
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
+            \node[state, accepting, initial, initial text=] (a) {$A$};
+            \node[state, accepting, right of = a] (b) {$B$};
+            \node[state, below = 3cm of b] (c) {$C$};
+            \node[state, right of = b] (d) {$D$};
+            \node[state, right of = c] (e) {$E$};
+            \node[state, accepting, right of = d] (f) {$F$};
+            \node[state, accepting, right of = e] (g) {$G$};
+            \node[state, below = 1cm of d] (z) {$Z$};
+
+            \path (a) edge node[above]{$a$} (b);
+            \path (b) edge node[left]{$a$} (c);
+            \path (b) edge node[above]{$b$} (d);
+            \path (c) edge node[above]{$b$} (e);
+            \path (d) edge node[above]{$c$} (f);
+            \path (e) edge node[above]{$c$} (g);
+            \path (f) edge[bend right=40] node[above]{$a$} (b);
+            \path (g) edge[bend left=40] node[below]{$a$} (c);
+
+            \draw (a) .. controls ($(b.north) + (0,2cm)$) and ($(f.north) + (1cm,2cm)$)
+                      .. ($(f.east) + (1cm,0)$)
+                      .. controls ($(z.east) + (3.5cm,2cm)$) and ($(z.east) + (3.5cm,0)$)
+                      .. (z.east)
+                node[near start, right] {$b,c$};
+            \path (b) edge node[right]{$c$} (z);
+            \path (d) edge node[right]{$a,b$} (z);
+            \path (f) edge node[right]{$b,c$} (z);
+            \path (c) edge node[right]{$a,c$} (z);
+            \path (e) edge node[right]{$a,b$} (z);
+            \path (g) edge node[right]{$b,c$} (z);
+            \path (z) edge[loop left] node[left]{$a,b,c$} (z);
+        \end{tikzpicture}
+        \caption{Úplný DKA $M_{U}$ so \emph{sink} stavom $Z$.}
+    \end{figure}
+
+    Nakoniec spravíme prevod na redukovaný DKA $M_{Z}$ pomocou Algoritmu 3.5 zo študíjnej
+    opory.
+    \begin{figure}[!h]
+        \begin{minipage}[b]{0.45\textwidth}
+            \begin{center}
+                \begin{tabular}{c  c | c  c  c}
+                    $\overset{0}{\equiv}$ & $\delta_{U}$ & $a$ & $b$ & $c$ \\
+                    \hline
+                    $I:$   & $A$ & $B_{I}$  & $Z_{II}$ & $Z_{II}$ \\
+                           & $B$ & $C_{II}$ & $D_{II}$ & $Z_{II}$ \\
+                           & $F$ & $B_{I}$  & $Z_{II}$ & $Z_{II}$ \\
+                           & $G$ & $C_{II}$ & $Z_{II}$ & $Z_{II}$ \\
+                    \hline
+                    $II:$  & $C$ & $Z_{II}$ & $E_{II}$ & $Z_{II}$ \\
+                           & $D$ & $Z_{II}$ & $Z_{II}$ & $F_{I}$  \\
+                           & $E$ & $Z_{II}$ & $Z_{II}$ & $G_{I}$  \\
+                           & $Z$ & $Z_{II}$ & $Z_{II}$ & $Z_{II}$ \\
+                \end{tabular}
+            \end{center}
+        \end{minipage}
+        \begin{minipage}[b]{0.45\textwidth}
+            \begin{flalign*}
+                &\overset{0}{\equiv}\ = \{ \{A, B, F, G\}, \{C, D, E, Z\} \}& \\
+            \end{flalign*}
+        \end{minipage}
+    \end{figure}
+
+    \begin{figure}[!h]
+        \begin{minipage}[b]{0.45\textwidth}
+            \begin{center}
+                \begin{tabular}{c  c | c  c  c}
+                    $\overset{1}{\equiv}$ & $\delta_{U}$ & $a$ & $b$ & $c$ \\
+                    \hline
+                    $I:$   & $A$ & $B_{II}$  & $Z_{III}$ & $Z_{III}$ \\
+                           & $F$ & $B_{II}$  & $Z_{III}$ & $Z_{III}$ \\
+                    \hline
+                    $II:$  & $B$ & $C_{III}$ & $D_{IV}$  & $Z_{III}$ \\
+                           & $G$ & $C_{III}$ & $Z_{III}$ & $Z_{III}$ \\
+                    \hline
+                    $III:$ & $C$ & $Z_{III}$ & $E_{IV}$  & $Z_{III}$ \\
+                           & $Z$ & $Z_{III}$ & $Z_{III}$ & $Z_{III}$ \\
+                    \hline
+                    $IV:$  & $D$ & $Z_{III}$ & $Z_{III}$ & $F_{I}$  \\
+                           & $E$ & $Z_{III}$ & $Z_{III}$ & $G_{II}$  \\
+                \end{tabular}
+            \end{center}
+        \end{minipage}
+        \begin{minipage}[b]{0.45\textwidth}
+            \begin{flalign*}
+                &\overset{1}{\equiv}\ = \{ \{A, F\}, \{B, G\}, \{C, Z\}, \{D, E\} \}& \\
+            \end{flalign*}
+        \end{minipage}
+    \end{figure}
+
+    \newpage
+    \begin{figure}[!h]
+        \begin{minipage}[b]{0.45\textwidth}
+            \begin{center}
+                \begin{tabular}{c  c | c  c  c}
+                    $\overset{2}{\equiv}$ & $\delta_{U}$ & $a$ & $b$ & $c$ \\
+                    \hline
+                    $I:$   & $A$ & $B_{II}$  & $Z_{V}$ & $Z_{V}$ \\
+                           & $F$ & $B_{II}$  & $Z_{V}$ & $Z_{V}$ \\
+                    \hline
+                    $II:$  & $B$ & $C_{IV}$ & $D_{VI}$  & $Z_{V}$ \\
+                    \hline
+                    $III:$ & $G$ & $C_{IV}$ & $Z_{V}$ & $Z_{V}$ \\
+                    \hline
+                    $IV:$  & $C$ & $Z_{V}$ & $E_{VII}$  & $Z_{V}$ \\
+                    \hline
+                    $V:$   & $Z$ & $Z_{V}$ & $Z_{V}$ & $Z_{V}$ \\
+                    \hline
+                    $VI:$  & $D$ & $Z_{V}$ & $Z_{V}$ & $F_{I}$  \\
+                    \hline
+                    $VII:$ & $E$ & $Z_{V}$ & $Z_{V}$ & $G_{III}$  \\
+                \end{tabular}
+            \end{center}
+        \end{minipage}
+        \begin{minipage}[b]{0.45\textwidth}
+            \begin{flalign*}
+                &\overset{2}{\equiv}\ = \{ \{A, F\}, \{B\}, \{G\}, \{C\}, \{Z\}, \{D\}, \{E\} \}& \\
+            \end{flalign*}
+        \end{minipage}
+    \end{figure}
+
+    U $\overset{2}{\equiv}$ končíme, nakoľko nie je možné vykonávať ďalší rozklad, teda
+    $\overset{2}{\equiv}\ =\ \equiv$. Redukovaný DKA $M_{Z} = (Q_{Z}, \Sigma, \delta_{Z},
+    q^{0}_{Z}, F_{Z})$ bude vyzerať nasledovne.
+
+    \begin{flalign*}
+        &Q_{D} = \{ \{A, F\}, \{B\}, \{C\}, \{D\}, \{E\}, \{G\}, \{Z\} \}
+            = \{ [A], [B], [C], [D], [E], [G], [Z] \} & \\
+        &q^{0}_{D} = [A] & \\
+        &F_{D} = \{ [A], [B], [G] \} & \\
+    \end{flalign*}
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
+            \node[state, accepting, right of = a] (b) {$[B]$};
+            \node[state, below = 3cm of b] (c) {$[C]$};
+            \node[state, right of = b] (d) {$[D]$};
+            \node[state, right of = c] (e) {$[E]$};
+            \node[state, initial, initial text=, initial where=right, accepting, right of = d] (f) {$[A]$};
+            \node[state, accepting, right of = e] (g) {$[G]$};
+            \node[state, below = 1cm of d] (z) {$[Z]$};
+
+            \path (b) edge node[left]{$a$} (c);
+            \path (b) edge node[above]{$b$} (d);
+            \path (c) edge node[above]{$b$} (e);
+            \path (d) edge node[above]{$c$} (f);
+            \path (e) edge node[above]{$c$} (g);
+            \path (f) edge[bend right=40] node[above]{$a$} (b);
+            \path (g) edge[bend left=40] node[below]{$a$} (c);
+
+            \path (b) edge node[right]{$c$} (z);
+            \path (d) edge node[right]{$a,b$} (z);
+            \path (f) edge node[right]{$b,c$} (z);
+            \path (c) edge node[right]{$a,c$} (z);
+            \path (e) edge node[right]{$a,b$} (z);
+            \path (g) edge node[right]{$b,c$} (z);
+            \path (z) edge[loop right] node[right]{$a,b,c$} (z);
+        \end{tikzpicture}
+        \caption{Redukovaný DKA $M_{Z}$.}
     \end{figure}
 
     \subtask TODO
