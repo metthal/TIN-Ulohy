@@ -7,6 +7,8 @@
 \usepackage{enumitem}
 \usepackage{ifthen}
 \usepackage{tikz}
+\usepackage{tikz-qtree}
+\usepackage{caption}
 
 \usetikzlibrary{arrows,automata,calc,positioning}
 
@@ -93,69 +95,195 @@ jazykov typu $i$.
 }
 \begin{mysolution}{subtasks}
     \subtask Budeme postupovať podľa Algoritmu 3.7 zo študíjnej opory. Najskôr rozložíme regulárny výraz
-    $r_{2}$ na primitívne zložky. Tie predstavujú regulárne výrazy $a, b, c, \varepsilon$.
+    $r_{2}$ na primitívne zložky. Rozklad znázorníme stromom.
 
-    Podľa Algoritmu 3.7 2ab zostrojíme konečné automaty pre tieto primitívne regulárne výrazy.
     \begin{figure}[!h]
         \centering
-        \begin{minipage}[b]{0.4\textwidth}
+        \begin{tikzpicture}[level 1/.style={sibling distance = 3.75cm}, level 2/.style={sibling distance = 1.5cm}]
+            \node {$r_{2}$}
+                child
+                {
+                    node {$r_{M}$} edge from parent
+                        child
+                        {
+                            node {$r_{G}$} edge from parent
+                                child
+                                {
+                                    node {$r_{F}$} edge from parent
+                                        child { node {$($} edge from parent }
+                                        child
+                                        {
+                                            node {$r_{E}$} edge from parent
+                                                child
+                                                {
+                                                    node {$r_{C}$} edge from parent
+                                                        child
+                                                        {
+                                                            node {$r_{A}$} edge from parent
+                                                                child { node {$a$} edge from parent };
+                                                        }
+                                                        child { node {\LARGE$\cdot$} edge from parent }
+                                                        child
+                                                        {
+                                                            node {$r_{B}$} edge from parent
+                                                                child { node {$b$} edge from parent };
+                                                        };
+                                                }
+                                                child { node {\LARGE$\cdot$} edge from parent }
+                                                child
+                                                {
+                                                    node {$r_{D}$} edge from parent
+                                                        child { node {$c$} edge from parent };
+                                                };
+                                        }
+                                        child { node {$)$} edge from parent };
+                                }
+                                child { node {$\ast$} edge from parent };
+                        }
+                        child { node {\LARGE$\cdot$} edge from parent }
+                        child
+                        {
+                            node {$r_{L}$} edge from parent
+                                child { node {$($} edge from parent }
+                                child
+                                {
+                                    node {$r_{K}$} edge from parent
+                                        child
+                                        {
+                                            node {$r_{I}$} edge from parent
+                                                child { node {$a$} edge from parent };
+                                        }
+                                        child { node {$+$} edge from parent }
+                                        child
+                                        {
+                                            node {$r_{J}$} edge from parent
+                                                child {node {$\varepsilon$} edge from parent };
+                                        };
+                                }
+                                child { node {$)$} edge from parent };
+                        };
+                }
+                child { node {\LARGE$\cdot$} edge from parent }
+                child
+                {
+                    node {$r_{T}$} edge from parent
+                        child
+                        {
+                            node {$r_{S}$} edge from parent
+                                child { node {$($} edge from parent }
+                                child
+                                {
+                                    node {$r_{R}$} edge from parent
+                                        child
+                                        {
+                                            node {$r_{P}$} edge from parent
+                                                child
+                                                {
+                                                    node {$r_{N}$} edge from parent
+                                                        child { node {$a$} edge from parent };
+                                                }
+                                                child { node {\LARGE$\cdot$} edge from parent }
+                                                child
+                                                {
+                                                    node {$r_{O}$} edge from parent
+                                                        child { node {$b$} edge from parent };
+                                                };
+                                        }
+                                        child { node {\LARGE$\cdot$} edge from parent }
+                                        child
+                                        {
+                                            node {$r_{Q}$} edge from parent
+                                                child { node {$c$} edge from parent };
+                                        };
+                                }
+                                child { node {$)$} edge from parent };
+                        }
+                        child { node {$\ast$} edge from parent };
+                };
+        \end{tikzpicture}
+        \caption{Rozklad regulárneho výrazu $r_{2}$.}
+    \end{figure}
+
+    Ďalej zostrojíme konečný automat $M_{x}$, kde $x$ je index odpovedajúci indexu regulárneho výrazu $r_{x}$,
+    pre každý regulárny výraz rozkladu postupujúc od listovej úrovne až ku koreňu stromu,
+    teda samotnému regulárnemu výrazu $r_{2}$.
+
+    \newpage
+    \begin{figure}[!h]
+        \centering
+        \begin{minipage}[b]{0.45\textwidth}
             \centering
+            \captionsetup{justification=centering}
             \begin{tikzpicture}[node distance = 3cm, ->, >=stealth, line width=1pt]
-                \node[state, initial, initial text=] (s) {$s_{\varepsilon}$};
-                \node[state, accepting, right of = s] (f) {$f_{\varepsilon}$};
+                \node[state, initial, initial text=] (s) {};
+                \node[state, accepting, right of = s] (f) {};
 
                 \path (s) edge node[above]{$\varepsilon$} (f);
             \end{tikzpicture}
-            \caption{KA ekvivalentný RV $\varepsilon$.}
+            \caption{RKA $M_{J}$ ekvivalentný\\RV $r_{J}$.}
         \end{minipage}
-        \begin{minipage}[b]{0.4\textwidth}
+        \begin{minipage}[b]{0.45\textwidth}
             \centering
+            \captionsetup{justification=centering}
             \begin{tikzpicture}[node distance = 3cm, ->, >=stealth, line width=1pt]
-                \node[state, initial, initial text=] (s) {$s_{a}$};
-                \node[state, accepting, right of = s] (f) {$f_{a}$};
+                \node[state, initial, initial text=] (s) {};
+                \node[state, accepting, right of = s] (f) {};
 
                 \path (s) edge node[above]{$a$} (f);
             \end{tikzpicture}
-            \caption{KA ekvivalentný RV $a$.}
+            \caption{RKA $M_{A}, M_{I}, M_{N}$ ekvivalentný\\RV $r_{A}, r_{I}, r_{N}$.}
         \end{minipage}
     \end{figure}
     \begin{figure}[!h]
         \centering
-        \begin{minipage}[b]{0.4\textwidth}
+        \begin{minipage}[b]{0.45\textwidth}
             \centering
+            \captionsetup{justification=centering}
             \begin{tikzpicture}[node distance = 3cm, ->, >=stealth, line width=1pt]
-                \node[state, initial, initial text=] (s) {$s_{b}$};
-                \node[state, accepting, right of = s] (f) {$f_{b}$};
+                \node[state, initial, initial text=] (s) {};
+                \node[state, accepting, right of = s] (f) {};
 
                 \path (s) edge node[above]{$b$} (f);
             \end{tikzpicture}
-            \caption{KA ekvivalentný RV $b$.}
+            \caption{RKA $M_{B}, M_{O}$ ekvivalentný\\RV $r_{B}, r_{O}$.}
         \end{minipage}
-        \begin{minipage}[b]{0.4\textwidth}
+        \begin{minipage}[b]{0.45\textwidth}
             \centering
+            \captionsetup{justification=centering}
             \begin{tikzpicture}[node distance = 3cm, ->, >=stealth, line width=1pt]
-                \node[state, initial, initial text=] (s) {$s_{c}$};
-                \node[state, accepting, right of = s] (f) {$f_{c}$};
+                \node[state, initial, initial text=] (s) {};
+                \node[state, accepting, right of = s] (f) {};
 
                 \path (s) edge node[above]{$c$} (f);
             \end{tikzpicture}
-            \caption{KA ekvivalentný RV $c$.}
+            \caption{RKA $M_{D}, M_{Q}$ ekvivalentný\\RV $r_{D}, r_{Q}$.}
         \end{minipage}
     \end{figure}
 
-    Z konečných automatov pre primitívne regulárne výrazy môžeme skladať konečné automaty pre zložitejšie
-    regulárne výrazy. Budeme postupovať podľa zátvoriek v regulárnom výraze $r_{2}$. Najskôr vyriešime regulárny výraz
-    v prvej zátvorke $(abc)^{*}$. Ten sa skladá z konkatenácie, ktorá je následne iterovaná. Konkatenáciu $abc$, alebo
-    aj $a.b.c$ zostrojíme pomocou Algoritmu 3.7 2d, ii.
     \begin{figure}[!h]
         \centering
         \begin{tikzpicture}[node distance = 2cm, ->, >=stealth, line width=1pt]
-            \node[state, initial, initial text=] (sa) {$s_{a}$};
-            \node[state, right of = sa] (fa) {$f_{a}$};
-            \node[state, right of = fa] (sb) {$s_{b}$};
-            \node[state, right of = sb] (fb) {$f_{b}$};
-            \node[state, right of = fb] (sc) {$s_{c}$};
-            \node[state, accepting, right of = sc] (fc) {$f_{c}$};
+            \node[state, initial, initial text=] (sa) {};
+            \node[state, right of = sa] (fa) {};
+            \node[state, right of = fa] (sb) {};
+            \node[state, accepting, right of = sb] (fb) {};
+
+            \path (sa) edge node[above]{$a$} (fa);
+            \path (fa) edge node[above]{$\varepsilon$} (sb);
+            \path (sb) edge node[above]{$b$} (fb);
+        \end{tikzpicture}
+        \caption{RKA $M_{C}, M_{P}$ ekvivalentný RV $r_{C}, r_{P}$.}
+    \end{figure}
+
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2cm, ->, >=stealth, line width=1pt, scale=0.8, every node/.style={transform shape}]
+            \node[state, initial, initial text=] (sa) {};
+            \node[state, right of = sa] (fa) {};
+            \node[state, right of = fa] (sb) {};
+            \node[state, right of = sb] (fb) {};
+            \node[state, right of = fb] (sc) {};
+            \node[state, accepting, right of = sc] (fc) {};
 
             \path (sa) edge node[above]{$a$} (fa);
             \path (fa) edge node[above]{$\varepsilon$} (sb);
@@ -163,21 +291,20 @@ jazykov typu $i$.
             \path (fb) edge node[above]{$\varepsilon$} (sc);
             \path (sc) edge node[above]{$c$} (fc);
         \end{tikzpicture}
-        \caption{KA ekvivalentný RV $abc$.}
+        \caption{RKA $M_{E}, M_{F}, M_{R}, M_{S}$ ekvivalentný RV $r_{E}, r_{F}, r_{R}, r_{S}$.}
     \end{figure}
 
-    Regulárny výraz $(abc)^{*}$ zostrojíme pomocou Algortimu 3.7 2d, iii.
     \begin{figure}[!h]
         \centering
         \begin{tikzpicture}[node distance = 1.7cm, ->, >=stealth, line width=1pt]
-            \node[state, initial, initial text=] (sx) {$s_{x}$};
-            \node[state, right of = sx] (sa) {$s_{a}$};
-            \node[state, right of = sa] (fa) {$f_{a}$};
-            \node[state, right of = fa] (sb) {$s_{b}$};
-            \node[state, right of = sb] (fb) {$f_{b}$};
-            \node[state, right of = fb] (sc) {$s_{c}$};
-            \node[state, right of = sc] (fc) {$f_{c}$};
-            \node[state, accepting, right of = fc] (fx) {$f_{x}$};
+            \node[state, initial, initial text=] (sx) {};
+            \node[state, right of = sx] (sa) {};
+            \node[state, right of = sa] (fa) {};
+            \node[state, right of = fa] (sb) {};
+            \node[state, right of = sb] (fb) {};
+            \node[state, right of = fb] (sc) {};
+            \node[state, right of = sc] (fc) {};
+            \node[state, accepting, right of = fc] (fx) {};
 
             \path (sx) edge node[above]{$\varepsilon$} (sa);
             \path (sx) edge[bend right=40] node[above]{$\varepsilon$} (fx);
@@ -189,22 +316,19 @@ jazykov typu $i$.
             \path (fc) edge node[above]{$\varepsilon$} (fx);
             \path (fc) edge[bend right=40] node[below]{$\varepsilon$} (sa);
         \end{tikzpicture}
-        \caption{KA ekvivalentný RV $(abc)^{*}$.}
+        \caption{RKA $M_{G}, M_{T}$ ekvivalentný RV $r_{G}, r_{T}$.}
     \end{figure}
 
     \newpage
-    Ďalšia zátvorka odpovedá regulárnemu výrazu $(a + \varepsilon)$. Pre tento regulárny výraz zostrojíme
-    konečný automat pomocou Algoritmu 3.7 2d, i.
-
     \begin{figure}[!h]
         \centering
-        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
-            \node[state, initial, initial text=] (sy) {$s_{y}$};
-            \node[state, above right = 0.5cm and 1.7cm of sy] (sa) {$s_{a}$};
-            \node[state, right of = sa] (fa) {$f_{a}$};
-            \node[state, below right = 0.5cm and 1.7cm of sy] (se) {$s_{\varepsilon}$};
-            \node[state, right of = se] (fe) {$f_{\varepsilon}$};
-            \node[state, accepting, right = 6.5cm of sy] (fy) {$f_{y}$};
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt, scale=0.8, every node/.style={transform shape}]
+            \node[state, initial, initial text=] (sy) {};
+            \node[state, above right = 0.5cm and 1.7cm of sy] (sa) {};
+            \node[state, right of = sa] (fa) {};
+            \node[state, below right = 0.5cm and 1.7cm of sy] (se) {};
+            \node[state, right of = se] (fe) {};
+            \node[state, accepting, right = 6.5cm of sy] (fy) {};
 
             \path (sy) edge node[above]{$\varepsilon$} (sa);
             \path (sy) edge node[below]{$\varepsilon$} (se);
@@ -213,45 +337,28 @@ jazykov typu $i$.
             \path (fa) edge node[above]{$\varepsilon$} (fy);
             \path (fe) edge node[below]{$\varepsilon$} (fy);
         \end{tikzpicture}
-        \caption{KA ekvivalentný RV $(a + \varepsilon)$.}
+        \caption{RKA $M_{K}, M_{L}$ ekvivalentný RV $r_{K}, r_{L}$.}
     \end{figure}
 
-    Tretia zátvorka odpovedá presne prvej zátvorke. Konečný automat pre ňu teda už máme zkonštruovaný.
-    Ostáva vytvoriť konečný automat predstavujúci konkatenáciu vzniknutých konečných automatov.
-
-    Z dôvodu toho, aby boli množiny stavov jednotlivých konečných automatov disjunktné, tak sa zaviedlo
-    premenovanie stavov, čo nijak nezmenilo prijímaný jazyk. Výsledný KA je rozšírený KA (RKA) nakoľko
-    obsahuje $\varepsilon$ prechody.
-
-    \newpage
     \begin{figure}[!h]
         \centering
-        \begin{tikzpicture}[node distance = 1.8cm, ->, >=stealth, line width=1pt, scale=0.72, every node/.style={transform shape}]
+        \begin{tikzpicture}[node distance = 1.8cm, ->, >=stealth, line width=1pt, scale=0.8, every node/.style={transform shape}]
             % (abc)*
-            \node[state, initial, initial text=] (a) {$A$};
-            \node[state, right of = a] (b) {$B$};
-            \node[state, right of = b] (c) {$C$};
-            \node[state, right of = c] (d) {$D$};
-            \node[state, right of = d] (e) {$E$};
-            \node[state, right of = e] (f) {$F$};
-            \node[state, right of = f] (g) {$G$};
-            \node[state, right of = g] (h) {$H$};
+            \node[state, initial, initial text=] (a) {};
+            \node[state, right of = a] (b) {};
+            \node[state, right of = b] (c) {};
+            \node[state, right of = c] (d) {};
+            \node[state, right of = d] (e) {};
+            \node[state, right of = e] (f) {};
+            \node[state, right of = f] (g) {};
+            \node[state, right of = g] (h) {};
             % (a + eps)
-            \node[state, below right = 3cm and 0.2cm of f] (i) {$I$};
-            \node[state, above left = 0.5cm and 1.7cm of i] (j) {$J$};
-            \node[state, left = 1.7cm of j] (k) {$K$};
-            \node[state, below left = 0.5cm and 1.7cm of i] (l) {$L$};
-            \node[state, left = 1.7cm of l] (m) {$M$};
-            \node[state, left = 6.5cm of i] (n) {$N$};
-            % (abc)*
-            \node[state, below = 6.2cm of a] (o) {$O$};
-            \node[state, right of = o] (p) {$P$};
-            \node[state, right of = p] (q) {$Q$};
-            \node[state, right of = q] (r) {$R$};
-            \node[state, right of = r] (s) {$S$};
-            \node[state, right of = s] (t) {$T$};
-            \node[state, right of = t] (u) {$U$};
-            \node[state, accepting, right of = u] (v) {$V$};
+            \node[state, below right = 2cm and 0.2cm of f] (i) {};
+            \node[state, above left = 0.5cm and 1.7cm of i] (j) {};
+            \node[state, left = 1.7cm of j] (k) {};
+            \node[state, below left = 0.5cm and 1.7cm of i] (l) {};
+            \node[state, left = 1.7cm of l] (m) {};
+            \node[state, accepting, left = 6.5cm of i] (n) {};
 
             \path (a) edge node[above]{$\varepsilon$} (b);
             \path (a) edge[bend left=40] node[above]{$\varepsilon$} (h);
@@ -270,20 +377,116 @@ jazykov typu $i$.
             \path (k) edge node[above]{$\varepsilon$} (n);
             \path (m) edge node[below]{$\varepsilon$} (n);
 
+            \path (h) edge[bend left=30] node[right]{$\varepsilon$} (i);
+        \end{tikzpicture}
+        \caption{RKA $M_{M}$ ekvivalentný RV $r_{M}$.}
+    \end{figure}
+
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 1.8cm, ->, >=stealth, line width=1pt, scale=0.8, every node/.style={transform shape}]
+            % (abc)*
+            \node[state, initial, initial text=] (a) {$1$};
+            \node[state, right of = a] (b) {$2$};
+            \node[state, right of = b] (c) {$3$};
+            \node[state, right of = c] (d) {$4$};
+            \node[state, right of = d] (e) {$5$};
+            \node[state, right of = e] (f) {$6$};
+            \node[state, right of = f] (g) {$7$};
+            \node[state, right of = g] (h) {$8$};
+            % (a + eps)
+            \node[state, below right = 2cm and 0.2cm of f] (i) {$9$};
+            \node[state, above left = 0.5cm and 1.7cm of i] (j) {$10$};
+            \node[state, left = 1.7cm of j] (k) {$11$};
+            \node[state, below left = 0.5cm and 1.7cm of i] (l) {$12$};
+            \node[state, left = 1.7cm of l] (m) {$13$};
+            \node[state, left = 6.5cm of i] (n) {$14$};
+            % (abc)*
+            \node[state, below = 4.5cm of a] (o) {$15$};
+            \node[state, right of = o] (p) {$16$};
+            \node[state, right of = p] (q) {$17$};
+            \node[state, right of = q] (r) {$18$};
+            \node[state, right of = r] (s) {$19$};
+            \node[state, right of = s] (t) {$20$};
+            \node[state, right of = t] (u) {$21$};
+            \node[state, accepting, right of = u] (v) {$22$};
+
+            \path (a) edge node[above]{$\varepsilon$} (b);
+            \path (a) edge[bend left=30] node[above]{$\varepsilon$} (h);
+            \path (b) edge node[above]{$a$} (c);
+            \path (c) edge node[above]{$\varepsilon$} (d);
+            \path (d) edge node[above]{$b$} (e);
+            \path (e) edge node[above]{$\varepsilon$} (f);
+            \path (f) edge node[above]{$c$} (g);
+            \path (g) edge node[above]{$\varepsilon$} (h);
+            \path (g) edge[bend right=30] node[below]{$\varepsilon$} (b);
+
+            \path (i) edge node[above]{$\varepsilon$} (j);
+            \path (i) edge node[below]{$\varepsilon$} (l);
+            \path (j) edge node[above]{$a$} (k);
+            \path (l) edge node[above]{$\varepsilon$} (m);
+            \path (k) edge node[above]{$\varepsilon$} (n);
+            \path (m) edge node[below]{$\varepsilon$} (n);
+
             \path (o) edge node[above]{$\varepsilon$} (p);
-            \path (o) edge[bend right=40] node[below]{$\varepsilon$} (v);
+            \path (o) edge[bend right=30] node[below]{$\varepsilon$} (v);
             \path (p) edge node[above]{$a$} (q);
             \path (q) edge node[above]{$\varepsilon$} (r);
             \path (r) edge node[above]{$b$} (s);
             \path (s) edge node[above]{$\varepsilon$} (t);
             \path (t) edge node[above]{$c$} (u);
             \path (u) edge node[above]{$\varepsilon$} (v);
-            \path (u) edge[bend left=40] node[above]{$\varepsilon$} (p);
+            \path (u) edge[bend left=30] node[above]{$\varepsilon$} (p);
 
             \path (h) edge[bend left=30] node[right]{$\varepsilon$} (i);
             \path (n) edge[bend right=30] node[right]{$\varepsilon$} (o);
         \end{tikzpicture}
-        \caption{KA ekvivalentný RV $(abc)^{*}(a + \varepsilon)(abc)^{*}$.}
+        \caption{RKA $M_{2}$ ekvivalentný RV $r_{2}$.}
+    \end{figure}
+
+    \newpage
+    Jednotlivé stavy RKA $M_{2}$ boli pomenované prirodzenými číslami. Ďalej budeme postupovať
+    podla Algoritmu 3.6 zo študíjnej opory na prevod RKA $M_{2}$ na DKA $M_{D}$, ktorý
+    zadefinujeme ako $(Q_{D}, \Sigma, \delta_{D}, q^{0}_{D}, F_{D})$. Z dôvodu prehladnosti
+    nie sú uvedené tie prechody, u ktorých je výsledkom $\{\varnothing\}$.
+    \begin{flalign*}
+        &q^{0}_{D} = \varepsilon\text{-uzáver}(1)
+            = \{1, 2, 8, 9, 10, 12, 13, 14, 15, 16, 22\} = A & \\
+        &\delta_{D}(A, a) = \varepsilon\text{-uzáver}(\{3, 11, 17\})
+            = \{3, 4, 11, 14, 15, 16, 17, 18, 22\} = B & \\
+        &\delta_{D}(B, a) = \varepsilon\text{-uzáver}(\{17\}) = \{17, 18\} = C & \\
+        &\delta_{D}(B, b) = \varepsilon\text{-uzáver}(\{5, 19\})
+            = \{5, 6, 19, 20\} = D & \\
+       &\delta_{D}(C, b) = \varepsilon\text{-uzáver}(\{19\}) = \{19, 20\} = E & \\
+       &\delta_{D}(D, c) = \varepsilon\text{-uzáver}(\{7, 21\})
+            = \{2, 7, 8, 9, 10, 12, 13, 14, 15, 16, 21, 22\} = F & \\
+       &\delta_{D}(E, c) = \varepsilon\text{-uzáver}(\{21\})
+            = \{16 ,21, 22\} = G & \\
+       &\delta_{D}(F, a) = \varepsilon\text{-uzáver}(\{3, 11, 17\})
+            = \{3, 4, 11, 14, 15, 16, 17, 18, 22\} = B & \\
+        &\delta_{D}(G, a) = \varepsilon\text{-uzáver}(\{17\}) = \{17, 18\} = C & \\
+    \end{flalign*}
+
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.2cm, ->, >=stealth, line width=1pt]
+            \node[state, accepting, initial, initial text=] (a) {$A$};
+            \node[state, accepting, right of = a] (b) {$B$};
+            \node[state, below of = b] (c) {$C$};
+            \node[state, right of = b] (d) {$D$};
+            \node[state, right of = c] (e) {$E$};
+            \node[state, accepting, right of = d] (f) {$F$};
+            \node[state, accepting, right of = e] (g) {$G$};
+
+            \path (a) edge node[above]{$a$} (b);
+            \path (b) edge node[left]{$a$} (c);
+            \path (b) edge node[above]{$b$} (d);
+            \path (c) edge node[above]{$b$} (e);
+            \path (d) edge node[above]{$c$} (f);
+            \path (e) edge node[above]{$c$} (g);
+            \path (f) edge[bend right=60] node[above]{$a$} (b);
+            \path (g) edge[bend left=60] node[below]{$a$} (c);
+        \end{tikzpicture}
     \end{figure}
 
     \subtask TODO
