@@ -739,7 +739,22 @@ TODO
     Je jazyk $L$ regulárny? Dokážte alebo vyvráťte.}
 \begin{mysolution}
 
-TODO pumping lemma
+    Predpokladajme, že jazyk $L$ je nekonečný regulárny jazyk.
+    Potom $\exists p > 0$ také, že platí
+    \begin{equation*}
+        w \in L \land \vert w \vert \ge p \Rightarrow
+        w = xyz \land y \ne \varepsilon
+            \land \vert xy \vert \le p
+            \land xy^{i}z \in L\ \text{pre}\ i \ge 0
+    \end{equation*}
+    Nech reťazec $w$ je generovaný ako $a^{p}b^{2p}c^{j}$.
+    Pokiaľ platí, že $\vert xy \vert \le p$, tak môžeme povedať že reťazec $xy$ sa skladá
+    výhradne zo symbolov $a$. Môžeme teda zapísať, že
+    $xy^{i}z = a^{p + (i-1)\vert y \vert}b^{2p}c^{j}$.
+    Pre $i = 0$ teda platí, že $xy^{0}z = a^{p - \vert y \vert}b^{2p}c^{j}$. Z toho vyplýva, že
+    $\#_{b} \neq 2\#_{a}$, pretože $\vert y \vert \ge 1$ a teda ani $xy^{0}z \not\in L$.
+    Dospeli sme ku sporu a teda ani pôvodný predpoklad nemôže byť pravdivý. Jazyk $L$ nie je
+    regulárny.
 \end{mysolution}
 
 \task{6}{Uvažujme algebru regulárnych množín ($A_{RM}$) nad abecedou $\Sigma$.
