@@ -738,15 +738,11 @@ $L(M_{restrict}) = restrict(L(M_{1}), L(M_{2}))$.}
         & \\
         &Q_{restrict} = Q_{1} \times Q_{2} & \\
         &\Sigma_{restrict} = \Sigma_{1} & \\
-        &\delta_{restrict} =
-            \{
-                \forall q_{1}, q_{2} \in Q_{1} \forall q_{3}, q_{4} \in Q_{2} \forall a \in \Sigma_{1} \forall u \in \Sigma_{1}^{*} \forall b \in \Sigma_{2} \forall v \in \Sigma_{2}^{*} : & \\
+        &\delta_{restrict} :
+                \forall q_{1}, q_{2} \in Q_{1} \forall q_{3}, q_{4} \in Q_{2} \forall a \in \Sigma_{1}\forall b \in \Sigma_{2} : & \\
                     &\hspace{140pt} (q_{2}, q_{4}) \in \delta_{restrict}((q_{1}, q_{3}), a) & \\
                     &\hspace{200pt} \Leftrightarrow & \\
-                    &\hspace{30pt} q_{2} \in \delta_{1}(q_{1}, a) \land q_{4} \in \delta_{2}(q_{3}, b) \land \vert u \vert = \vert v \vert
-                        \land (q^{0}_{1}, u) \underset{M_{1}}{\vdash}^{*} (q_{1}, \varepsilon)
-                        \land (q^{0}_{2}, v) \underset{M_{2}}{\vdash}^{*} (q_{3}, \varepsilon)
-            \}
+                    &\hspace{140pt} q_{2} \in \delta_{1}(q_{1}, a) \land q_{4} \in \delta_{2}(q_{3}, b)
         & \\
         &q^{0}_{restrict} = (q^{0}_{1}, q^{0}_{2}) & \\
         &F_{restrict} = F_{1} \times F_{2}
