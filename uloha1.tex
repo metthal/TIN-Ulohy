@@ -691,32 +691,39 @@ Jednotlivé regulárne výrazy každého stavu si označíme $X, Y\text{a}\ Z$ p
 stavy znázornené v diagrame na Obrázku 1 z ľava do prava. Pre nájdenie riešenia, teda
 ekvivalntného regulárneho výrazu značiaceho rovnaký jazyk, ako je príjmaný jazyk $L(M_{3})$,
 je potrebné určiť regulárny výraz $X$ predstavujúci regulárny výraz pre počiatočný stav.
-\begin{flalign*}
+\begin{flalign}
     X =&\ aY & \\
     Y =&\ cX + cY + bZ & \\
     Z =&\ bX + aY + \varepsilon &
-\end{flalign*}
-Dosadíme za $Z$ do rovnice číslo 2. Dostávame sústavu
-\begin{flalign*}
+\end{flalign}
+Dosadíme za $X$ a $Z$ do rovnice číslo 2. Dostávame nasledovnú sústavu.
+\begin{flalign}
     X =&\ aY & \\
-    Y =&\ cX + cY + bZ & \\
-      =&\ cX + cY + b(bX + aY + \varepsilon) & \\
-      =&\ cX + cY + bbX + baY + b & \\
-      =&\ (c + ba)Y + (c + bb)X + b & \\
-      =&\ (c + ba)^{*}((c + bb)X + b) &
-\end{flalign*}
-Rovnicu číslo 2 sme upravili do tvaru najmenšieho pevného bodu podľa Vety 2.3, ktorá hovorí, že
-najmenším pevným bodom rovnice v tvare $X = pX + q$ je $X = p^{*}q$.
-
-Za $Y$ následne dosadíme do rovnice číslo 1 a získame tak 1 rovnicu, ktorú znova upravíme do
-tvaru najmenšieho pevného bodu.
-\begin{flalign*}
+    Y =&\ caY + cY + b(bX + aY + \varepsilon) & \\
+      =&\ caY + cY + bbX + baY + b & \\
+    Z =&\ bX + aY + \varepsilon &
+\end{flalign}
+Znovu dosadíme za $X$, tentoraz do rovnice číslo 6.
+\begin{flalign}
     X =&\ aY & \\
-      =&\ a(c + ba)^{*}((c + bb)X + b) & \\
-      =&\ a(c + ba)^{*}(c + bb)X + a(c + ba)^{*}b & \\
-      =&\ (a(c + ba)^{*}(c + bb))^{*}a(c + ba)^{*}b &
-\end{flalign*}
-Regulárny výraz $X$ značí rovnaký jazyk, ako je príjmaný jazyk $L(M_{3})$.
+    Y =&\ caY + cY + bbaY + baY + b & \\
+    Z =&\ bX + aY + \varepsilon &
+\end{flalign}
+Rovnicu číslo 9 môžeme riešiť samostatne, nakoľko sa z nej stala rovnica s jednou neznámou.
+Budeme ju riešiť pomocou vety 3.14 zo študíjnej opory, ktorá vraví, že najmenším pevným bodom (najmenším riešením)
+rovnice nad regulárnymi výrazmi $X = pX + q$ je $X = p^{*}q$.
+\begin{flalign}
+    Y =&\ caY + cY + bbaY + baY + b & \\
+      =&\ (ca + c + bba + ba)Y + b & \\
+      =&\ (ca + c + bba + ba)^{*}b &
+\end{flalign}
+Rovnicu číslo 13 následne môžeme dosadiť do rovnice číslo 1.
+\begin{flalign}
+    X =&\ aY & \\
+      =&\ a(ca + c + bba + ba)^{*}b &
+\end{flalign}
+Nakoľko je $X$ počiatočným stavom automatu $M_{3}$,
+tak sa jedná o hľadaný regulárny výraz značiaci regulárny jazyk $L(M_{3})$.
 \end{mysolution}
 
 \task{4}{Pre dva formálne jazyky $L_{1}$ a $L_{2}$ definujeme operáciu $restrict$ nasledovne:
@@ -788,6 +795,7 @@ $L(M_{restrict}) = restrict(L(M_{1}), L(M_{2}))$.}
     Budeme sa tým pádom opierať o fakt, že regulárna množina $A$ je regulárny jazyk a dôkaz založíme na definícií 2.9 zo študíjnej opory,
     ktorá definuje iteráciu jazyka nasledovne.
 
+    \setcounter{equation}{0}
     \begin{align}
         L^{0} &= \{\varepsilon\} \\
         L^{n} &= L . L^{n - 1}\ \text{pre}\ n \ge 1 \\
