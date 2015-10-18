@@ -784,7 +784,36 @@ $L(M_{restrict}) = restrict(L(M_{1}), L(M_{2}))$.}
 }
 \begin{mysolution}{subtasks}
 
-    \subtask TODO
+    \subtask Veta 3.12 a 3.13 v študíjnej opore hovorí, že jazyk $L$ je regulárnou množinou práve vtedy, ak je $L$ jazykom typu 3.
+    Budeme sa tým pádom opierať o fakt, že regulárna množina $A$ je regulárny jazyk a dôkaz založíme na definícií 2.9 zo študíjnej opory,
+    ktorá definuje iteráciu jazyka nasledovne.
+
+    \begin{align}
+        L^{0} &= \{\varepsilon\} \\
+        L^{n} &= L . L^{n - 1}\ \text{pre}\ n \ge 1 \\
+        L^{*} &= \underset{n \ge 0}{\bigcup} L^{n} \\
+        L^{+} &= \underset{n \ge 1}{\bigcup} L^{n}
+    \end{align}
+
+    Podľa vety 2.1 zo študíjnej opory taktiež platí nasledovné.
+    \begin{align}
+        L^{*} &= L^{+} \cup \{\varepsilon\} \\
+        L^{+} &= L.L^{*} = L^{*}.L
+    \end{align}
+
+    U dókazu bude použitá logická spojka pre ekvivalenciu $\Longleftrightarrow$, nad ktorou je vždy uvedené číslo
+    predpokladu z rovníc spomenutých vyššie, alebo slovne popísaný krok.
+
+    \begin{align*}
+        \{\varepsilon\}\ \cup&\ A.A^{*} = A^{*} \\
+                               &\overset{6}{\Longleftrightarrow} \\
+        \{\varepsilon\}\ \cup&\ A^{+} = A^{*} \\
+            &\hspace{-20pt}\overset{komutativita\ \cup}{\Longleftrightarrow} \\
+                    A^{+}\ \cup\ &\{\varepsilon\} = A^{*} \\
+                               &\overset{5}{\Longleftrightarrow} \\
+        A^{*}& = A^{*}
+    \end{align*}
+
     \subtask TODO
 \end{mysolution}
 
