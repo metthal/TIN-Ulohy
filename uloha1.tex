@@ -661,7 +661,159 @@ jazykov typu $i$.
         \caption{Redukovaný DKA $M_{Z}$.}
     \end{figure}
 
-    \subtask TODO
+    \subtask Relácia $\sim_{L}$ je podľa Myhill-Nerodovej vety v definovaná definíciou 3.17 v študíjnej opore nasledovne.
+
+    Nech $L$ je ľubovolný jazyk nad abecedou $\Sigma$. Na množine $\Sigma^{*}$ definujeme reláciu $\sim_{L}$ zvanú
+    \emph{prefixová ekvivalencia} pre $L$ takto:
+    \begin{equation*}
+        u \sim_{L} v \overset{def}{\Longleftrightarrow} \forall w \in \Sigma^{*} : uw \in L \Longleftrightarrow vw \in L
+    \end{equation*}
+
+    Podľa vety 3.21 zo študíjnej opory taktiež platí, že počet stavov ľubovolného minimálneho DKA príjmajúceho $L$
+    je rovný indexu $\sim_{L}$. Tento minimálny automat sme si zostrojili v úlohe (a). Zostáva nám určiť triedy ekvivalencie,
+    ktoré odpovedajú triedam ekvivalencie minimálneho DKA $M_{Z}$ úlohy (a). Pre každú triedu resp. stav zostrojíme jazyk $L^{-1}$
+    a k nemu odpovedajúci konečný automat.
+
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
+            \node[state, initial, initial text=, initial where=right, accepting, right of = d] (f) {$[A]$};
+            \node[state, right of = a] (b) {$[B]$};
+            \node[state, right of = b] (d) {$[D]$};
+
+            \path (b) edge node[above]{$b$} (d);
+            \path (f) edge[bend right=40] node[above]{$a$} (b);
+            \path (d) edge node[above]{$c$} (f);
+        \end{tikzpicture}
+        \caption{KA príjmajúci jazyk $L^{-1}([A]) = (abc)^{*}$.}
+    \end{figure}
+
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
+            \node[state, initial, initial text=, initial where=right, right of = d] (f) {$[A]$};
+            \node[state, accepting, right of = a] (b) {$[B]$};
+            \node[state, right of = b] (d) {$[D]$};
+
+            \path (b) edge node[above]{$b$} (d);
+            \path (f) edge[bend right=40] node[above]{$a$} (b);
+            \path (d) edge node[above]{$c$} (f);
+        \end{tikzpicture}
+        \caption{KA príjmajúci jazyk $L^{-1}([B]) = (abc)^{*}a$.}
+    \end{figure}
+
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
+            \node[state, initial, initial text=, initial where=right, right of = d] (f) {$[A]$};
+            \node[state, right of = a] (b) {$[B]$};
+            \node[state, accepting, right of = b] (d) {$[D]$};
+
+            \path (b) edge node[above]{$b$} (d);
+            \path (f) edge[bend right=40] node[above]{$a$} (b);
+            \path (d) edge node[above]{$c$} (f);
+        \end{tikzpicture}
+        \caption{KA príjmajúci jazyk $L^{-1}([D]) = (abc)^{*}ab$.}
+    \end{figure}
+
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
+            \node[state, right of = a] (b) {$[B]$};
+            \node[state, accepting, below = 1.1cm of b] (c) {$[C]$};
+            \node[state, right of = b] (d) {$[D]$};
+            \node[state, right of = c] (e) {$[E]$};
+            \node[state, initial, initial text=, initial where=right, right of = d] (f) {$[A]$};
+            \node[state, right of = e] (g) {$[G]$};
+
+            \path (b) edge node[left]{$a$} (c);
+            \path (b) edge node[above]{$b$} (d);
+            \path (c) edge node[above]{$b$} (e);
+            \path (d) edge node[above]{$c$} (f);
+            \path (e) edge node[above]{$c$} (g);
+            \path (f) edge[bend right=40] node[above]{$a$} (b);
+            \path (g) edge[bend left=40] node[below]{$a$} (c);
+        \end{tikzpicture}
+        \caption{KA príjmajúci jazyk $L^{-1}([C]) = (abc)^{*}a(abc)^{*}a$.}
+    \end{figure}
+
+    \newpage
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
+            \node[state, right of = a] (b) {$[B]$};
+            \node[state, below = 1.1cm of b] (c) {$[C]$};
+            \node[state, right of = b] (d) {$[D]$};
+            \node[state, accepting, right of = c] (e) {$[E]$};
+            \node[state, initial, initial text=, initial where=right, right of = d] (f) {$[A]$};
+            \node[state, right of = e] (g) {$[G]$};
+
+            \path (b) edge node[left]{$a$} (c);
+            \path (b) edge node[above]{$b$} (d);
+            \path (c) edge node[above]{$b$} (e);
+            \path (d) edge node[above]{$c$} (f);
+            \path (e) edge node[above]{$c$} (g);
+            \path (f) edge[bend right=40] node[above]{$a$} (b);
+            \path (g) edge[bend left=40] node[below]{$a$} (c);
+        \end{tikzpicture}
+        \caption{KA príjmajúci jazyk $L^{-1}([E]) = (abc)^{*}a(abc)^{*}ab$.}
+    \end{figure}
+
+    \vspace{-15pt}
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
+            \node[state, right of = a] (b) {$[B]$};
+            \node[state, below = 1.1cm of b] (c) {$[C]$};
+            \node[state, right of = b] (d) {$[D]$};
+            \node[state, right of = c] (e) {$[E]$};
+            \node[state, initial, initial text=, initial where=right, right of = d] (f) {$[A]$};
+            \node[state, accepting, right of = e] (g) {$[G]$};
+
+            \path (b) edge node[left]{$a$} (c);
+            \path (b) edge node[above]{$b$} (d);
+            \path (c) edge node[above]{$b$} (e);
+            \path (d) edge node[above]{$c$} (f);
+            \path (e) edge node[above]{$c$} (g);
+            \path (f) edge[bend right=40] node[above]{$a$} (b);
+            \path (g) edge[bend left=40] node[below]{$a$} (c);
+        \end{tikzpicture}
+        \caption{KA príjmajúci jazyk $L^{-1}([G]) = (abc)^{*}a(abc)^{*}abc$.}
+    \end{figure}
+
+    \vspace{-15pt}
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
+            \node[state, right of = a] (b) {$[B]$};
+            \node[state, below = 2.4cm of b] (c) {$[C]$};
+            \node[state, right of = b] (d) {$[D]$};
+            \node[state, right of = c] (e) {$[E]$};
+            \node[state, initial, initial text=, initial where=right, right of = d] (f) {$[A]$};
+            \node[state, right of = e] (g) {$[G]$};
+            \node[state, accepting, below = 0.7cm of d] (z) {$[Z]$};
+
+            \path (b) edge node[left]{$a$} (c);
+            \path (b) edge node[above]{$b$} (d);
+            \path (c) edge node[above]{$b$} (e);
+            \path (d) edge node[above]{$c$} (f);
+            \path (e) edge node[above]{$c$} (g);
+            \path (f) edge[bend right=40] node[above]{$a$} (b);
+            \path (g) edge[bend left=40] node[below]{$a$} (c);
+
+            \path (b) edge node[right]{$c$} (z);
+            \path (d) edge node[right]{$a,b$} (z);
+            \path (f) edge node[right]{$b,c$} (z);
+            \path (c) edge node[right]{$a,c$} (z);
+            \path (e) edge node[right]{$a,b$} (z);
+            \path (g) edge node[right]{$b,c$} (z);
+            \path (z) edge[loop right] node[right]{$a,b,c$} (z);
+        \end{tikzpicture}
+        \caption{KA príjmajúci jazyk $L^{-1}([Z])$.}
+    \end{figure}
+
+    Pričom platí, že jazyk $L(M_{Z}) = L^{-1}([A]) \cup L^{-1}([B]) \cup L^{-1}([G])$.
+
 \end{mysolution}
 
 \task{3}{Uvažujte NKA $M_{3}$ nad abecedou $\Sigma = \{a, b, c\}$ z Obrázku 1: \\
