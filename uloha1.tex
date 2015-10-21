@@ -9,6 +9,7 @@
 \usepackage{tikz}
 \usepackage{tikz-qtree}
 \usepackage{caption}
+\usepackage{background}
 
 \usetikzlibrary{arrows,automata,calc,positioning}
 
@@ -23,11 +24,26 @@
             {\begin{enumerate}[label={}] \item}
 }{\end{enumerate} \newpage}
 \newcommand{\subtask}{\item}
+
+\SetBgContents{
+        \parbox{0.4\textwidth}{
+            \raggedleft
+                Marek Milkovič \\
+                \texttt{xmilko01@stud.fit.vutbr.cz}
+        }
+}
+\SetBgScale{0.75}
+\SetBgOpacity{1}
+\SetBgAngle{0}
+\SetBgColor{black}
+\SetBgPosition{current page.north east}
+\SetBgVshift{-0.8cm}
+\SetBgHshift{-3.5cm}
  
 \begin{document}
  
 \title{TIN 2015/2016: Úloha 1}
-\author{Marek Milkovič}
+\author{Marek Milkovič \\ \small\texttt{xmilko01@stud.fit.vutbr.cz}}
 \maketitle
 
 \task{1}{Uvažujte jazyk $L_{1} = \{a^{i}b^{j}c^{i}d^{k} \pipesep i,j,k \ge 0\}$.
