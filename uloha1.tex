@@ -60,7 +60,7 @@
 \begin{flalign*}
     G_{1} = (&N, \Sigma, P, S) &\\[5pt]
     N &= \{S, A, B, D\} &\\
-    \Sigma &= \{a, b, c\} &\\
+    \Sigma &= \{a, b, c, d\} &\\
     P&: \\
     &S \to A D &\\
     &A \to a A c \pipesep B \pipesep \varepsilon &\\
@@ -78,15 +78,14 @@ Typ gramatiky a typ jazyka sa môže všeobecne líšiť. Podľa vety 2.3 zo št
     \mathcal{L}_{3} \subseteq \mathcal{L}_{2} \subseteq \mathcal{L}_{1} \subseteq \mathcal{L}_{0}
 \end{equation*}
 
-kde $\mathcal{L}_{i}$ je trieda všetkých jazykov typu $i$. Podľa Chomského definícií gramatík v kaptiole 2.3 v študíjnej
+kde $\mathcal{L}_{i}$ je trieda všetkých jazykov typu $i$. Podľa Chomského definícií gramatík v kapitole 2.3 v študíjnej
 opore a z Chomského hierarchie jazykov spomenutej vyššie vyplýva, že každá gramatika typu 3 je zároveň typu 2 a každá gramatika
 typu 1 je zároveň typu 0. Z inklúzie $\mathcal{L}_{2} \subseteq \mathcal{L}_{1}$ taktiež platí, že každú gramatiku typu 2 je možné
 transformovať na ekvivalentnú gramatiku typu 1. Gramatiky typu $i$ sú tým pádom schopné generovať jazyky typu $i$ a vyššie.
 
-Jazyk $L_{1}$ teda môže byť typu 2 či 3. To vyplýva z toho, že gramatika typu $i$ môže generovať jazyk
-typu $i$ a vyšší. Je teda potrebné dokázať, o aký jazyk sa jedná pomocou pumping lemma pre
+Jazyk $L_{1}$ teda môže byť typu 2 či 3. Je teda potrebné dokázať, o aký jazyk sa jedná pomocou pumping lemma pre
 regulárne jazyky. Predpokladajme, že $L_{1}$ je regulárny jazyk (typu~3).
-Potom platí že
+Potom platí, že
 \begin{align*}
     \exists p > 0 : \forall w \in L_{1} :
     \vert w \vert \ge p \Rightarrow
@@ -518,7 +517,7 @@ Jazyk $L_{1}$ musí byť typu 2.
     \end{figure}
 
     Aby sme mohli DKA minimalizovať, je potrebné najskôr vykonať niekoľko krokov. Najprv musíme
-    DKA $M_{D}$ transformovať na úplný DKA $M_{U}$ doplnením tzv \emph{sink} stavu, tak aby platilo, že
+    DKA $M_{D}$ transformovať na úplný DKA $M_{U}$ doplnením tzv. \emph{sink} stavu, tak aby platilo, že
     $\delta_{D}$ je totálnou funkciou na $Q \times \Sigma$.
 
     \newpage
@@ -953,7 +952,7 @@ $L(M_{restrict}) = restrict(L(M_{1}), L(M_{2}))$.}
     musí platiť $\#_{b}(a^{p - \vert y \vert}b^{2p}c^{j}) = 2\#_{a}(a^{p - \vert y \vert}b^{2p}c^{j})$.
     Hľadáme teda riešenie rovnice $p - \vert y \vert = 2p$, ktoré je $\vert y \vert = -p$.
     To však platí iba pre $\vert y \vert = 0$, pretože dĺžka reťazca nemôže byť záporná. Dostávame
-    sa však do sporu, pretože musí platiť, že $p > 0$ a zároveň musí platiť, že $y \neq \varepsilon$, teda $\vert y \vert \neq 0$.
+    sa však do sporu, pretože musí platiť, že $p > 0$ a zároveň musí platiť, že $y \neq \varepsilon$, teda $\vert y \vert > 0$.
     Pôvodný predpoklad, že jazyk $L$ je regulárny teda nie je platný. Jazyk $L$ nie je regulárny.
 \end{mysolution}
 
