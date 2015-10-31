@@ -1,0 +1,127 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{ifthen}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usepackage{caption}
+\usepackage{background}
+
+\usetikzlibrary{arrows,automata,calc,positioning}
+
+\newcommand{\task}[2]{\par \noindent \textbf{{#1}.} \hspace{3pt} #2 \vspace{10pt}}
+\newcommand{\solution}{\vspace{10pt}}
+\newcommand{\pipesep}{\hspace{3pt} \vert \hspace{3pt}}
+
+\newenvironment{subtasklist}[0]{\begin{enumerate}[label=(\alph*)]}{\end{enumerate}}
+\newenvironment{mysolution}[1]{
+    \par \textbf{Riešenie} \newline
+    \ifthenelse{\equal{#1}{subtasks}}{\begin{enumerate}[label=(\alph*)]}
+            {\begin{enumerate}[label={}] \item}
+}{\end{enumerate} \newpage}
+\newcommand{\subtask}{\item}
+
+\SetBgContents{
+        \parbox{0.4\textwidth}{
+            \raggedleft
+                Marek Milkovič \\
+                \texttt{xmilko01}
+        }
+}
+\SetBgScale{0.75}
+\SetBgOpacity{1}
+\SetBgAngle{0}
+\SetBgColor{black}
+\SetBgPosition{current page.north east}
+\SetBgVshift{-0.8cm}
+\SetBgHshift{-3.5cm}
+ 
+\begin{document}
+
+\title{TIN 2015/2016: Úloha 2}
+\author{Marek Milkovič \\ \small\texttt{xmilko01@stud.fit.vutbr.cz}}
+\maketitle
+
+\task{1}{Dokážte alebo vyvráťte, že jazyk $L = \{ a^{i}b^{j}c^{i}d^{j} \pipesep i,j \in
+	\mathbb{N} \}$ bezkontextový.}
+
+\begin{mysolution}
+
+	TODO
+\end{mysolution}
+
+\task{2}{S využitím uzáverových vlastností bezkontextových a regulárnych jazykov dokážte
+	alebo vyvráťte, že je jazyk $L \setminus L'$ nutne bezkontextový, a to pre každý zo štryroch
+	nasledujúcich prípadov.
+	\begin{subtasklist}
+	\item $L \in \mathcal{L}_{3}, L' \in \mathcal{L}_{3}$
+	\item $L \in \mathcal{L}_{3}, L' \in \mathcal{L}_{2}$
+	\item $L \in \mathcal{L}_{2}, L' \in \mathcal{L}_{3}$
+	\item $L \in \mathcal{L}_{2}, L' \in \mathcal{L}_{2}$
+	\end{subtasklist}
+}
+
+\begin{mysolution}
+
+	TODO
+\end{mysolution}
+
+\task{3}{Uvažujme bezkontextové gramatiky nad abecedou $\Sigma \subseteq \mathbb{Z}$.
+	Definujme váhu slova $w = k_{1}...k_{2} \in \Sigma^{*}$ ako
+	$\vert\vert w \vert\vert = \sum\limits_{i=1}^{n} k_{i}$. Váha bezkontextovej gramatiky $G$
+	nad abecedou $\Sigma$ je potom definovaná ako minimálna váha slova jejho jazyka,
+	$\vert\vert G \vert\vert = \text{min}\{\vert\vert w \vert\vert \pipesep w \in L(G)\}$.
+	Minimum množiny čísel je definované štandardným spôsobom s tým, že
+	$\text{min}(\varnothing) = \infty$, a pokiaľ je $S$ neprázdna množina, ktorá neobsahuje
+	minimálny prvok, je $\text{min}(S) = -\infty$. Pre $-\infty$ a $\infty$ počítame s pravidlami
+	$\text{min}(\{-\infty\} \cup S) = -\infty$ a $\text{min}(\{\infty\} \cup S) = \text{min}(S)$.
+	Navrhnite algoritmus, ktorý pre danú $G$ vráti $\vert\vert G \vert\vert$, a to
+	\begin{subtasklist}
+	\item najskôr pre prípad, kedy $\Sigma \subset \mathbb{N}$, teda medzi symbolmi nie sú
+		záporné čísla,
+	\item a potom vo všeobecnom prípade, kedy $\Sigma \subset \mathbb{Z}$.
+	\end{subtasklist}}
+
+\begin{mysolution}
+
+	TODO
+\end{mysolution}
+
+\task{4}{Dokážte formálne, že $L \subseteq L(G)$, kde
+	$L = \{0^{i}1^{j} \pipesep 0 \le 2i \le j \le 3 \}$ a $G = (\{S\},\{0,1\},P,S)$ je
+	bexkontextová gramatika s pravidlami
+	\begin{equation*}
+		S \to 0S11 \pipesep 0S111 \pipesep \varepsilon .
+	\end{equation*}
+	Dôkaz veďte indukciou k počtu symbolov $0$ v slove $w \in L$.}
+
+\begin{mysolution}
+
+	TODO
+\end{mysolution}
+
+\task{5}{Majme gramatiku $G = (\{S\},\{\textbf{if},\textbf{else},cond,com\},P,S)$ s pravidlami
+\begin{equation*}
+	S \to \textbf{if}\ cond\ S \pipesep \textbf{if}\ cond\ S\ \textbf{else}\ S \pipesep com .
+\end{equation*}
+\begin{subtasklist}
+	\item Je gramatika jednoznačná? Dokážte.
+	\item Je $L(G)$ jazyk s inherentnou viacznačnosťou? Zdôvodnite.
+	\item Navrhnite deterministický zásobníkový automat akceptujúci $L(G)$. Prezentujte jej
+		prechodovým diagramom a demonštrujte jeho beh na slove
+	\begin{equation*}
+	\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com\ \textbf{else}\ 
+	\textbf{if}\ cond\ com.
+	\end{equation*}
+\end{subtasklist}}
+
+\begin{mysolution}
+
+	TODO
+\end{mysolution}
+
+\end{document}
