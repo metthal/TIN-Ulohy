@@ -19,18 +19,18 @@
 
 \newenvironment{subtasklist}[0]{\begin{enumerate}[label=(\alph*)]}{\end{enumerate}}
 \newenvironment{mysolution}[1]{
-    \par \textbf{Riešenie} \newline
-    \ifthenelse{\equal{#1}{subtasks}}{\begin{enumerate}[label=(\alph*)]}
-            {\begin{enumerate}[label={}] \item}
+	\par \textbf{Riešenie} \newline
+	\ifthenelse{\equal{#1}{subtasks}}{\begin{enumerate}[label=(\alph*)]}
+			{\begin{enumerate}[label={}] \item}
 }{\end{enumerate} \newpage}
 \newcommand{\subtask}{\item}
 
 \SetBgContents{
-        \parbox{0.4\textwidth}{
-            \raggedleft
-                Marek Milkovič \\
-                \texttt{xmilko01}
-        }
+		\parbox{0.4\textwidth}{
+			\raggedleft
+				Marek Milkovič \\
+				\texttt{xmilko01}
+		}
 }
 \SetBgScale{0.75}
 \SetBgOpacity{1}
@@ -46,16 +46,67 @@
 \author{Marek Milkovič \\ \small\texttt{xmilko01@stud.fit.vutbr.cz}}
 \maketitle
 
-\task{1}{Dokážte alebo vyvráťte, že jazyk $L = \{ a^{i}b^{j}c^{i}d^{j} \pipesep i,j \in
+\task{1}{Dokážte alebo vyvráťte, že je jazyk $L = \{ a^{i}b^{j}c^{i}d^{j} \pipesep i,j \in
 	\mathbb{N} \}$ bezkontextový.}
 
 \begin{mysolution}
 
-	TODO
+	Použijeme pumping lemmu pre bezkontexové jazyky podľa vety 4.19 v študíjnej opore. Nech je teda
+	$L$ bezkontextový jazyk. Potom platí
+	\begin{align*}
+		\exists p > 0 : \forall z \in L :
+		\vert z \vert \ge p \Rightarrow
+		\exists u,v,w,x,y \in \Sigma^{*} :&\ z = uvwxy\ \land \\
+									  &\ vx \ne \varepsilon\ \land \\
+									  &\ \vert vwx \vert \le p\ \land \\
+									  &\ \forall i \ge 0 : uv^{i}wx^{i}y \in L\
+	\end{align*}
+	Nech reťazec $z = a^{p}b^{p}c^{p}d^{p}$. Určite platí $|z| \ge p$, lebo vieme, že
+	$|z| = 4p$. Nakoľko $|vwx| \le p$, tak môže nastať len istý počet možností toho, v akom
+	tvare je $vwx$. Tie sú
+	\begin{enumerate}[label=\arabic*.]
+		\item $vwx$ sa skladá výhradne zo symbolov $a$
+		\item $vwx$ sa skladá výhradne zo symbolov $b$
+		\item $vwx$ sa skladá výhradne zo symbolov $c$
+		\item $vwx$ sa skladá výhradne zo symbolov $d$
+		\item $vwx$ sa nachádza na rozhraní symbolov $a,b$
+		\item $vwx$ sa nachádza na rozhraní symbolov $b,c$
+		\item $vwx$ sa nachádza na rozhraní symbolov $c,d$
+	\end{enumerate}
+
+	Najskôr vyriešime prípad číslo 1. Vieme, že pokiaľ $uv^{i}wx^{i}y$ má patriť
+	do $L$, tak je to ekvivalentné tomu, že $a^{p + (i-1)|vx|}b^{p}c^{p}d^{p}$ má
+	patriť do $L$. Pokiaľ položíme $i = 0$, tak $a^{p - |vx|}b^{p}c^{p}d^{p}$ má
+	patriť do $L$. Vieme však, že musí platiť $\#_{a}(z) = \#_{c}(z)$. Potom hľadáme
+	také $|vx|$, aby platilo $p - |vx| = p$. To však platí výhradne pre $|vx| = 0$. Z podmienok
+	pumping lemmy však vieme, že $vx \not= \varepsilon$, a teda $|vx| \not= 0$. To je
+	spor.
+
+	Prípady 2,3 a 4 sú analogické ku 1. V prípade číslo 3, by sme len určili reťazec
+	$uv^{i}wx^{i}y$ ako $a^{p}b^{p}c^{p + (i-1)|vx|}d^{p}$ a znova by sme dospeli k rovnakému
+	sporu. V prípadoch číslo 3 a 4 by sme analogicky určili reťazce rovnako ako pre dvojicu
+	$a,c$ a vychádzali z toho, že $\#_{b}(z) = \#_{d}(z)$. Dospejeme k rovnakému sporu.
+
+	V prípadoch čislo 5,6 a 7 zanedbáme také tvary reťazca $uvwxy$, kedy podreťazec $v$ alebo $x$
+	sa nebude skladať výhradne z jediného symbolu. Takéto prípady môžeme zanedbať kvôli tomu,
+	že pri ich mocnení v reťazci $uv^{i}wx^{i}y$ by došlo k porušeniu poradia symbolov, ktoré
+	musí byť v každom prípade zachované. Budeme preto uvažovať, že rozhranie symbolov na ktorých
+	sa $vwx$ nachádza, je súčasťou podreťazca $w$.
+
+	V prípade číslo 5 môžeme zapísať, že $uv^{i}wx^{i}y$ odpovedá $a^{p + (i-1)|v|}b^{p + (i-1)|x|}c^{p}d^{p}$.
+	Položmé $i = 0$. Potom možeme zapísať, že $uv^{0}wx^{0}y = a^{p - |v|}b^{p - |x|}c^{p}d^{p}$.
+	Hľadáme teda také $|v|$ a $|x|$, aby platilo $p - |v| = p$ a zároveň $p - |x| = p$, pretože vieme, že
+	musí platiť $\#_{a}(z) = \#_{c}(z)$ a $\#_{b}(z) = \#_{d}(z)$. To platí len pre $|v| = 0$ a $|x| = 0$.
+	Z toho ale vyplýva, že aj $|vx| = 0$. Z podmienok pumping lemmy ale musí platiť $vx \not= \varepsilon$
+	a teda $|vx| \not= 0$. Dostávame sa do sporu.
+
+	Prípady čislo 6 a 7 môžu byť vyriešené analogicky, ako prípad číslo 5. Nakoľko sme sa dostali v každom
+	prípade do sporu, tak aj pôvodné tvrdenie, že $L$ je bezkontextový jazyk nemôže platiť. Jazyk $L$ tým
+	pádom nie je bezkontextový.
 \end{mysolution}
 
 \task{2}{S využitím uzáverových vlastností bezkontextových a regulárnych jazykov dokážte
-	alebo vyvráťte, že je jazyk $L \setminus L'$ nutne bezkontextový, a to pre každý zo štryroch
+	alebo vyvráťte, že je jazyk $L \setminus L'$ nutne bezkontextový, a to pre každý zo štyroch
 	nasledujúcich prípadov.
 	\begin{subtasklist}
 	\item $L \in \mathcal{L}_{3}, L' \in \mathcal{L}_{3}$
@@ -65,9 +116,22 @@
 	\end{subtasklist}
 }
 
-\begin{mysolution}
+\begin{mysolution}{subtasks}
+	\subtask Podľa vety 3.22 zo študíjnej opory vieme, že trieda regulárnych jazykov $\mathcal{L}_{3}$
+	je uzavrená voči zjednoteniu $\cup$, konkatenácií $\cdot$ a iterácií $*$. Taktiež podľa vety 3.23
+	vieme, že trieda regulárnych jazykov $\mathcal{L}_{3}$ tvorí množinovú Booleovu algebru. Rozdiel
+	$L \setminus L'$ si potom môžeme pomocou DeMorganových zákonov vyjadriť nasledovne.
+	\begin{equation*}
+		L \setminus L' = L \cap \overline{L'} = \overline{\overline{L \cap \overline{L'}}} =
+		\overline{\overline{L} \cup \overline{\overline{L'}}} = \overline{\overline{L} \cup L'}
+	\end{equation*}
+	Z Booleovej algebry plynie uzavretosť voči komplementu a z definície regulárnych množín
+	a ich ekvivalencií s regulárnymi jazykmi plynie uzavretosť voči $\cup$. Tým pádom
+	$L \setminus L'$ je jazyk regulárny.
 
-	TODO
+	\subtask Tu znova DeMorgan a ukazat, ze sice ich prienik je CF, ale ten vysledny komplement uz CF nie je
+	\subtask Komplement je uzavrety na L3, prienik s L2 je znova L2, takze toto plati
+	\subtask Tu to kazi jak komplement, tak prienik, urcite nie je CF
 \end{mysolution}
 
 \task{3}{Uvažujme bezkontextové gramatiky nad abecedou $\Sigma \subseteq \mathbb{Z}$.
@@ -93,7 +157,7 @@
 
 \task{4}{Dokážte formálne, že $L \subseteq L(G)$, kde
 	$L = \{0^{i}1^{j} \pipesep 0 \le 2i \le j \le 3 \}$ a $G = (\{S\},\{0,1\},P,S)$ je
-	bexkontextová gramatika s pravidlami
+	bezkontextová gramatika s pravidlami
 	\begin{equation*}
 		S \to 0S11 \pipesep 0S111 \pipesep \varepsilon .
 	\end{equation*}
@@ -111,7 +175,7 @@
 \begin{subtasklist}
 	\item Je gramatika jednoznačná? Dokážte.
 	\item Je $L(G)$ jazyk s inherentnou viacznačnosťou? Zdôvodnite.
-	\item Navrhnite deterministický zásobníkový automat akceptujúci $L(G)$. Prezentujte jej
+	\item Navrhnite deterministický zásobníkový automat akceptujúci $L(G)$. Prezentujte ho
 		prechodovým diagramom a demonštrujte jeho beh na slove
 	\begin{equation*}
 	\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com\ \textbf{else}\ 
@@ -119,9 +183,236 @@
 	\end{equation*}
 \end{subtasklist}}
 
-\begin{mysolution}
+\begin{mysolution}{subtasks}
+	\subtask Podľa definície 4.5 zo študíjnej opory hovoríme, že veta $w$ generovaná gramatikou $G$
+	je viacznačná, pokiaľ existujú aspoň 2 rôzne derivačné stromy s koncovými uzlami tvoriacmi vetu $w$.
+	Gramatiku $G$ potom nazýva viacznačná, pokiaľ generuje aspoň jednu viacznačnú vetu. Stačí nám teda
+	vygenerovať gramatikou $G$ nejakú vetu, pre ktorú vieme zostrojiť aspoň 2 derivačné stromy a tým
+	dokázať jej viacznačnosť. Takou vetou je napríklad veta
+	\begin{equation*}
+	\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com
+	\end{equation*}
+	Táto veta mohla vzniknúť dvoma možnými deriváciami, ktoré odpovedajú dvom možným derivačným stromom.
+	\begin{figure}[!h]
+		\centering
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			\begin{align*}
+				S \Rightarrow\ &\textbf{if}\ cond\ S \Rightarrow \\
+							   &\textbf{if}\ cond\ \textbf{if}\ cond\ S\ \textbf{else}\ S \Rightarrow \\
+							   &\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ S \Rightarrow \\
+							   &\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com
+			\end{align*}
+		\end{minipage}
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			\begin{align*}
+				S \Rightarrow\ &\textbf{if}\ cond\ S\ \textbf{else}\ S \Rightarrow \\
+							   &\textbf{if}\ cond\ \textbf{if}\ cond\ S\ \textbf{else}\ S \Rightarrow \\
+							   &\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ S \Rightarrow \\
+							   &\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com
+			\end{align*}
+		\end{minipage}
+	\end{figure}
+	\begin{figure}[!h]
+		\centering
+		\begin{minipage}[b]{0.45\textwidth}
+			\begin{tikzpicture}[level 1/.style={sibling distance = 1.75cm}, level 2/.style={sibling distance = 1.5cm}]
+				\node {$S$}
+					child
+					{
+						node {\textbf{if}} edge from parent
+					}
+					child
+					{
+						node {$cond$} edge from parent
+					}
+					child
+					{
+						node {$S$} edge from parent
+							child
+							{
+								node {\textbf{if}} edge from parent
+							}
+							child
+							{
+								node {$cond$} edge from parent
+							}
+							child
+							{
+								node {$S$} edge from parent
+									child
+									{
+										node {$com$} edge from parent
+									};
+							}
+							child
+							{
+								node {\textbf{else}} edge from parent
+							}
+							child
+							{
+								node {$S$} edge from parent
+									child
+									{
+										node {$com$} edge from parent
+									};
+							};
+					};
+			\end{tikzpicture}
+		\end{minipage}
+		\begin{minipage}[b]{0.45\textwidth}
+			\begin{tikzpicture}[level 1/.style={sibling distance = 1.75cm}, level 2/.style={sibling distance = 1.5cm}]
+				\node {$S$}
+					child
+					{
+						node {\textbf{if}} edge from parent
+					}
+					child
+					{
+						node {$cond$} edge from parent
+					}
+					child
+					{
+						node {$S$} edge from parent
+							child
+							{
+								node {\textbf{if}} edge from parent
+							}
+							child
+							{
+								node {$cond$} edge from parent
+							}
+							child
+							{
+								node {$S$} edge from parent
+									child
+									{
+										node {$com$} edge from parent
+									};
+							};
+					}
+					child
+					{
+						node {\textbf{else}} edge from parent
+					}
+					child
+					{
+						node {$S$} edge from parent
+							child
+							{
+								node {$com$} edge from parent
+							};
+					};
+			\end{tikzpicture}
+		\end{minipage}
+	\end{figure}
+	\subtask Podľa definície 4.5 zo študíjnej opory hovoríme o jazyku s inherentnou viacznačnosťou, pokiaľ neexistuje
+	jednoznačna gramatika generujúca tento jazyk. Určenie, či je gramatika viacznačna, alebo nie, je problém nerozhodnuteľný,
+	preto nie je možné algoritmicky dokázať jednoznačnosť, avšak môžeme intuitívne lokalizovať problém, prečo je daná gramatika
+	viacznačna a vhodnými úpravami z nej spraviť gramatiku jednoznačnú. V našej gramatike $G$ je problém ten, že nie je možné
+	jednoznačne vytvoriť pár \textbf{if}-\textbf{else}, ktorý patrí k sebe. Túto gramatiku transformujeme na gramatiku
+	$G' = (N \cup \{S'\},\Sigma,P',S)$.
+	\begin{align*}
+		P': S &\to \textbf{if}\ cond\ S \pipesep \textbf{if}\ cond\ S'\ \textbf{else}\ S \pipesep com \\
+		S' &\to \textbf{if}\ cond\ S'\ \textbf{else}\ S' \pipesep com
+	\end{align*}
+	Táto gramatika rieši spomínaný problém tak, že vždy spáruje najbližšií \textbf{if}-\textbf{else} a tým povoluje tvorbu
+	len jednej z možných derivácií. Veta $\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com$ má v tejto gramatike
+	len jediný derivačný strom a to nasledovný. Môžeme teda predpokladať, aj keď bez dôkazu, že tento jazyk je bez inherentnej viacznačnosti.
+	\begin{figure}[!h]
+		\centering
+		\begin{minipage}[ht]{0.45\textwidth}
+		\centering
+			\begin{tikzpicture}[level 1/.style={sibling distance = 1.75cm}, level 2/.style={sibling distance = 1.5cm}]
+				\node {$S$}
+					child
+					{
+						node {\textbf{if}} edge from parent
+					}
+					child
+					{
+						node {$cond$} edge from parent
+					}
+					child
+					{
+						node {$S$} edge from parent
+							child
+							{
+								node {\textbf{if}} edge from parent
+							}
+							child
+							{
+								node {$cond$} edge from parent
+							}
+							child
+							{
+								node {$S'$} edge from parent
+									child
+									{
+										node {$com$} edge from parent
+									};
+							}
+							child
+							{
+								node {\textbf{else}} edge from parent
+							}
+							child
+							{
+								node {$S$} edge from parent
+									child
+									{
+										node {$com$} edge from parent
+									};
+							};
+					};
+			\end{tikzpicture}
+		\end{minipage}
+		\begin{minipage}[ht]{0.45\textwidth}
+			\centering
+			\begin{align*}
+				S \Rightarrow\ &\textbf{if}\ cond\ S \Rightarrow \\
+							   &\textbf{if}\ cond\ \textbf{if}\ cond\ S'\ \textbf{else}\ S \Rightarrow \\
+							   &\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ S \Rightarrow \\
+							   &\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com
+			\end{align*}
+		\end{minipage}
+	\end{figure}
+	\subtask Zostrojíme DZKA $P = (Q,\Sigma,\Gamma,\delta,q_{0},z_{0},F)$, ktorý bude prijímať jazyk $L(G) = L(P)$
+	prechodom do koncového stavu. Dôvodom je to, že v jazyku $L(G)$ existujú také 2 reťazce, že jeden je prefixom druhého.
+	V prípade takéhoto jazyka nie je možné, aby bol prijímaný DKZA vyprázdnením zásobníku.
 
-	TODO
+	\begin{figure}[!h]
+		\begin{minipage}[ht]{0.25\textwidth}
+			\begin{flalign*}
+				&Q = \{q_{1},q_{2},q_{3},q_{4},q_{5}\} & \\
+				&\Sigma = \{\textbf{if},\textbf{else},cond,com\} & \\
+				&\Gamma = \{\textbf{if}, Z\} & \\
+				&q_{0} = q_{1} & \\
+				&z_{0} = Z & \\
+				&F = \{q_{4}\} &
+			\end{flalign*}
+		\end{minipage}
+		\begin{minipage}[h]{0.85\textwidth}
+			\centering
+			\begin{tikzpicture}[node distance = 2.95cm, ->, >=stealth, line width=1pt, scale=0.9, every node/.style={transform shape}]
+				\node[state, initial, initial text=$Z$] (q1) {$q_{1}$};
+				\node[state, right of = q1] (q2) {$q_{2}$};
+				\node[state, right of = q2] (q3) {$q_{3}$};
+				\node[state, accepting, right of = q3] (q4) {$q_{4}$};
+				\node[state, below of = q4] (q5) {$q_{5}$};
+
+				\path (q1) edge node[above]{\small$\textbf{if},Z/\textbf{if}$} (q2);
+				\path (q2) edge node[above]{\small$cond,\textbf{if}/\textbf{if}$} (q3);
+				\path (q3) edge[bend right=60] node[above]{\small$\textbf{if},\textbf{if}/\textbf{if\ if}$} (q2);
+				\path (q3) edge node[above]{\small$com,\textbf{if}/\textbf{if}$} (q4);
+				\path (q4) edge node[right]{\small$\textbf{else},\textbf{if}/\textbf{if}$} (q5);
+				\path (q5) edge[bend left] node[left]{\small$com,\textbf{if}/\varepsilon$} (q4);
+				\path (q5) edge[bend left=30] node[above]{\small$\textbf{if},\textbf{if}/\textbf{if}$} (q2);
+			\end{tikzpicture}
+		\end{minipage}
+	\end{figure}
+
 \end{mysolution}
 
 \end{document}
