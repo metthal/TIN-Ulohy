@@ -117,25 +117,59 @@
 }
 
 \begin{mysolution}{subtasks}
-	\subtask Podľa vety 3.22 zo študíjnej opory vieme, že trieda regulárnych jazykov $\mathcal{L}_{3}$
-	je uzavrená voči zjednoteniu $\cup$, konkatenácií $\cdot$ a iterácií $*$. Taktiež podľa vety 3.23
-	vieme, že trieda regulárnych jazykov $\mathcal{L}_{3}$ tvorí množinovú Booleovu algebru. Rozdiel
-	$L \setminus L'$ si potom môžeme pomocou DeMorganových zákonov vyjadriť nasledovne.
+	\subtask Podľa vety 3.23 vieme, že trieda regulárnych jazykov $\mathcal{L}_{3}$
+	tvorí množinovú Booleovu algebru. Rozdiel
+	$L \setminus L'$ si potom môžeme vyjadriť nasledovne.
 	\begin{equation*}
-		L \setminus L' = L \cap \overline{L'} = \overline{\overline{L \cap \overline{L'}}} =
-		\overline{\overline{L} \cup \overline{\overline{L'}}} = \overline{\overline{L} \cup L'}
+		L \setminus L' = L \cap \overline{L'}
 	\end{equation*}
-	Z Booleovej algebry plynie uzavretosť voči komplementu a z definície regulárnych množín
-	a ich ekvivalencií s regulárnymi jazykmi plynie uzavretosť voči $\cup$. Tým pádom
-	$L \setminus L'$ je jazyk regulárny.
+	Z Booleovej algebry plynie uzavretosť voči komplementu a prieniku. Tým pádom
+	$L \setminus L'$ je jazyk regulárny. $L \setminus L'$ nie je teda nutne bezkotextový.
 
-	\subtask Tu znova DeMorgan a ukazat, ze sice ich prienik je CF, ale ten vysledny komplement uz CF nie je
-	\subtask Komplement je uzavrety na L3, prienik s L2 je znova L2, takze toto plati
-	\subtask Tu to kazi jak komplement, tak prienik, urcite nie je CF
+	\subtask Použitím DeMorganových zákonov vyjadríme $L \setminus L'$ ako
+	\begin{equation*}
+		L \setminus L' = L \cap \overline{L'} = \overline{\overline{L \cap \overline{L'}}}
+		= \overline{\overline{L} \cup \overline{\overline{L'}}} = \overline{\overline{L} \cup L'}
+	\end{equation*}
+	Podľa vety 3.23, ktorá hovorí, že trieda regulárnych jazykov $\mathcal{L}_{3}$ tvorí množinovú
+	Booleovu algebru vieme, že $\mathcal{L}_{3}$ je uzavretá voči komplementu. 
+	$\overline{L}$ teda zostane regulárny jazyk. Pokiaľ teda jazyk
+	$\overline{L} \in \mathcal{L}_{3}$, tak existuje gramatika typu 3
+	$G_{1} = (N_{1}, \Sigma_{1}, P_{1}, S_{1})$, ktorá
+	tento jazyk generuje. Analogicky, ak $L' \in \mathcal{L}_{2}$, tak existuje gramatika
+	typu 2 $G_{2} = (N_{2}, \Sigma_{2}, P_{2}, S_{2})$ generujúca $L'$.
+	Zjednotenie $\overline{L} \cup L'$ teda odpovedá jazyku, ktorý je generovaný
+	gramatikou $G = (N_{1} \cup N_{2} \cup \{S\}, \Sigma_{1} \cup \Sigma_{2},
+	P_{1} \cup P_{2} \cup \{S \to S_{1}|S_{2}\}, S)$. Musí ale platiť podmienka, že
+	$N_{1} \cap N_{2} = \varnothing$. Nakoľko gramatika $G$ obsahuje prepisovacie pravidlá
+	v tvare $A \to \alpha$, kde $A \in N, \alpha \in (N \cup \Sigma)^{*}$, ktorý definuje
+	gramatiku typu 2 podľa Chomského klasifikácie gramatík, tak $G$ je typu 2.
+	Jazyk $\overline{L} \cup L'$ avšak nemusí byť nutne bezkontextový, môže sa jednať aj o
+	jazyk regulárny.
+	(Napr. $\{a^{i}b^{j} \pipesep i,j > 0\} \cup \{a^{n}b^{n} \pipesep n \ge 0\}$, čo je jazyk
+	regulárny). Pokiaľ by teda jazyk $\overline{L} \cup L'$ bol regulárny, tak aj
+	$\overline{\overline{L} \cup L'}$ by bol jazyk regulárny a teda aj $L \setminus L'$.
+	Pokiaľ by však bol bezkontextový, tak podľa vety 4.24 zo študíjnej opory, bezkontextové
+	jazyky nie sú uzavrené voči doplnku. Takže $L \setminus L'$ nie je nutne bezkontextový.
+	\subtask Opäť upravíme $L \setminus L'$ na ekvivalentný tvar.
+	\begin{equation*}
+		L \setminus L' = L \cap \overline{L'}
+	\end{equation*}
+	Vzhľadom na to, že trieda regulárnych jazykov $\mathcal{L}_{3}$ tvorí množinovú
+	Booleovu algebru, tak jazyk $\overline{L'}$ je opäť regulárny, kvôli uzavretosti
+	komplementu. Podľa vety 4.22 zo študíjnej opory, bezkontextové jazyky sú uzavreté
+	voči prieniku s regulárnymi jazkykmi. $L \setminus L'$ je teda v tomto prípade nutne
+	bezkontextový jazyk.
+	\subtask Opäť upravíme $L \setminus L'$ na ekvivalentný tvar.
+	\begin{equation*}
+		L \setminus L' = L \cap \overline{L'}
+	\end{equation*}
+	Podľa vety 4.24 zo študíjnej opory, bezkontextové jazyky nie sú uzavreté voči prieniku a ani
+	voči doplnku. Nie je preto možné, aby $L \setminus L'$ bol nutne bezkontextový.
 \end{mysolution}
 
 \task{3}{Uvažujme bezkontextové gramatiky nad abecedou $\Sigma \subseteq \mathbb{Z}$.
-	Definujme váhu slova $w = k_{1}...k_{2} \in \Sigma^{*}$ ako
+	Definujme váhu slova $w = k_{1}...k_{n} \in \Sigma^{*}$ ako
 	$\vert\vert w \vert\vert = \sum\limits_{i=1}^{n} k_{i}$. Váha bezkontextovej gramatiky $G$
 	nad abecedou $\Sigma$ je potom definovaná ako minimálna váha slova jejho jazyka,
 	$\vert\vert G \vert\vert = \text{min}\{\vert\vert w \vert\vert \pipesep w \in L(G)\}$.
@@ -152,11 +186,14 @@
 
 \begin{mysolution}
 
-	TODO
+	Majme na vstupe bezkontextovú gramatiku $G = (N, \Sigma, P, S)$. Myšlienka algoritmu na výpočet
+	$||G||$ je založená na iteratívnom ohodnocovaní neterminálnych symbolov na základe prepisovacích
+	pravidiel v tvare $A \to \alpha$. Toto ohodnotenie sa navyše v každej iterácií propaguje do ďalších neterminálov
+	na základe existujúcich pravidiel v tvare $B \to \beta A \gamma$.
 \end{mysolution}
 
 \task{4}{Dokážte formálne, že $L \subseteq L(G)$, kde
-	$L = \{0^{i}1^{j} \pipesep 0 \le 2i \le j \le 3 \}$ a $G = (\{S\},\{0,1\},P,S)$ je
+	$L = \{0^{i}1^{j} \pipesep 0 \le 2i \le j \le 3i\}$ a $G = (\{S\},\{0,1\},P,S)$ je
 	bezkontextová gramatika s pravidlami
 	\begin{equation*}
 		S \to 0S11 \pipesep 0S111 \pipesep \varepsilon .
@@ -165,7 +202,55 @@
 
 \begin{mysolution}
 
-	TODO
+	Určime $n = \#_{0}(w)$ pre $w \in L$.
+	\begin{itemize}
+		\item $n = 0$ \\
+			V tomto prípade sa $w = \varepsilon$. V gramatike $G$ existuje derivácia
+			$S \Rightarrow \varepsilon$, ktorá generuje túto vetu.
+		\item $n = i$ \\
+			Predpokladajme, že gramatika $G$ dokáže generovať ľubovolnú vetu $0^{i}0^{j}$,
+			pre ktorú platí $2i \le j \le 3i$,
+			použitím derivácií $S \Rightarrow 0S11$ a $S \Rightarrow 0S111$. Táto veta bude
+			vygenerovaná po $i + 1$ derivačných krokoch. Môžeme teda zapísať
+			\begin{equation*}
+				S \Rightarrow^{i+1} 0^{i}1^{j}
+			\end{equation*}
+		\item $n = i + 1$ \\
+			Dokážeme, že gramatika $G$ generuje ľubovolnú vetu $w = 0^{i+1}0^{j+k}$, kde
+			$k \in \{2,3\}$ z dôvodu dodržania podmienky $2(i+1) \le j+k \le 3(i+1)$.
+			Túto podmienku môžeme upraviť na $2i+2 \le j+k \le 3i+3$. Pokiaľ platí
+			$2i \le j \le 3i$, tak $2 \le k \le 3$.
+			Potom by malo platiť, že
+			\begin{equation*}
+				S \Rightarrow^{i+2} 0^{i+1}1^{j+k}
+			\end{equation*}
+			Vetu $0^{i+1}1^{j+k}$ môžeme zapísať aj ako $00^{i}1^{j}1^{k}$.
+			Z indukčného predpokladu vieme, že platí
+			\begin{equation*}
+				S \Rightarrow^{i+1} 0^{i}1^{j}
+			\end{equation*}
+			Pre dve možné hodnoty $k$ môžeme zapísať, že
+			\begin{itemize}
+				\item $k = 2$
+					\begin{equation*}
+						S \Rightarrow 0S11 \Rightarrow^{i+1} 00^{i}1^{j}11
+					\end{equation*}
+				\item $k = 3$
+					\begin{equation*}
+						S \Rightarrow 0S111 \Rightarrow^{i+1} 00^{i}1^{j}111
+					\end{equation*}
+			\end{itemize}
+			Všeobecne teda platí, že
+			\begin{equation*}
+				S \Rightarrow 0S1^{k} \Rightarrow^{i+1} 00^{i}1^{j}1^{k}
+			\end{equation*}
+			$00^{i}1^{j}1^{k}$ sa ale rovná $0^{i+1}1^{j+k}$, a teda platí aj pôvodné
+			tvrdenie
+			\begin{equation*}
+				S \Rightarrow^{i+2} 0^{i+1}1^{j+k}
+			\end{equation*}
+
+	\end{itemize}
 \end{mysolution}
 
 \task{5}{Majme gramatiku $G = (\{S\},\{\textbf{if},\textbf{else},cond,com\},P,S)$ s pravidlami
@@ -412,6 +497,25 @@
 			\end{tikzpicture}
 		\end{minipage}
 	\end{figure}
+
+	Beh tohto automatu je znázornený pomocou prechodov automatu medzi konfiguráciami.
+	\begin{align*}
+		&(q_{1}, \textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com, Z)
+		\vdash \\
+		&(q_{2}, cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com, \textbf{if}\ Z)
+		\vdash \\
+		&(q_{3}, \textbf{if}\ cond\ com\ \textbf{else}\ com, \textbf{if}\ Z)
+		\vdash \\
+		&(q_{2}, cond\ com\ \textbf{else}\ com, \textbf{if}\ \textbf{if}\ Z)
+		\vdash \\
+		&(q_{3}, com\ \textbf{else}\ com, \textbf{if}\ \textbf{if}\ Z)
+		\vdash \\
+		&(q_{4}, \textbf{else}\ com, \textbf{if}\ \textbf{if}\ Z)
+		\vdash \\
+		&(q_{5}, com, \textbf{if}\ \textbf{if}\ Z)
+		\vdash \\
+		&(q_{4}, \varepsilon, \textbf{if}\ Z)
+	\end{align*}
 
 \end{mysolution}
 
