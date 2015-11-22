@@ -124,7 +124,7 @@
 		L \setminus L' = L \cap \overline{L'}
 	\end{equation*}
 	Z Booleovej algebry plynie uzavretosť voči komplementu a prieniku. Tým pádom
-	$L \setminus L'$ je jazyk regulárny. $L \setminus L'$ nie je teda nutne bezkotextový.
+	$L \setminus L'$ je jazyk regulárny. $L \setminus L'$ je teda nutne bezkotextový.
 
 	\subtask Použitím DeMorganových zákonov vyjadríme $L \setminus L'$ ako
 	\begin{equation*}
@@ -144,12 +144,9 @@
 	$N_{1} \cap N_{2} = \varnothing$. Nakoľko gramatika $G$ obsahuje prepisovacie pravidlá
 	v tvare $A \to \alpha$, kde $A \in N, \alpha \in (N \cup \Sigma)^{*}$, ktorý definuje
 	gramatiku typu 2 podľa Chomského klasifikácie gramatík, tak $G$ je typu 2.
-	Jazyk $\overline{L} \cup L'$ avšak nemusí byť nutne bezkontextový, môže sa jednať aj o
-	jazyk regulárny.
-	(Napr. $\{a^{i}b^{j} \pipesep i,j > 0\} \cup \{a^{n}b^{n} \pipesep n \ge 0\}$, čo je jazyk
-	regulárny). Pokiaľ by teda jazyk $\overline{L} \cup L'$ bol regulárny, tak aj
-	$\overline{\overline{L} \cup L'}$ by bol jazyk regulárny a teda aj $L \setminus L'$.
-	Pokiaľ by však bol bezkontextový, tak podľa vety 4.24 zo študíjnej opory, bezkontextové
+	Jazyk $\overline{L} \cup L'$ je teda nutne bezkontextový.
+	Pokiaľ teda jazyk $\overline{L} \cup L'$ je nutne bezkontextový, tak 
+	podľa vety 4.24 zo študíjnej opory, bezkontextové
 	jazyky nie sú uzavrené voči doplnku. Takže $L \setminus L'$ nie je nutne bezkontextový.
 	\subtask Opäť upravíme $L \setminus L'$ na ekvivalentný tvar.
 	\begin{equation*}
@@ -160,12 +157,15 @@
 	komplementu. Podľa vety 4.22 zo študíjnej opory, bezkontextové jazyky sú uzavreté
 	voči prieniku s regulárnymi jazkykmi. $L \setminus L'$ je teda v tomto prípade nutne
 	bezkontextový jazyk.
-	\subtask Opäť upravíme $L \setminus L'$ na ekvivalentný tvar.
+	\subtask Pokiaľ má platiť, že bezkontextové jazyky majú byť uzavreté voči rozdielu,
+	tak musí platiť, že $L \setminus (L \setminus L')$ je tiež bezkontextový jazyk.
+	Tento výraz, však môžeme napísať v ekvivalentom tvare ako
 	\begin{equation*}
-		L \setminus L' = L \cap \overline{L'}
+		L \setminus (L \setminus L') = L \cap L'
 	\end{equation*}
-	Podľa vety 4.24 zo študíjnej opory, bezkontextové jazyky nie sú uzavreté voči prieniku a ani
-	voči doplnku. Nie je preto možné, aby $L \setminus L'$ bol nutne bezkontextový.
+	Podľa vety 4.24 zo študíjnej opory, bezkontextové jazyky nie sú uzavreté voči prieniku.
+	Nie je preto možné, aby boli teda uzavreté voči rozdielu. $L \setminus L'$ tým pádom
+	nie je nutne bezkontextový.
 \end{mysolution}
 
 \task{3}{Uvažujme bezkontextové gramatiky nad abecedou $\Sigma \subseteq \mathbb{Z}$.
@@ -184,12 +184,57 @@
 	\item a potom vo všeobecnom prípade, kedy $\Sigma \subset \mathbb{Z}$.
 	\end{subtasklist}}
 
-\begin{mysolution}
-
-	Majme na vstupe bezkontextovú gramatiku $G = (N, \Sigma, P, S)$. Myšlienka algoritmu na výpočet
-	$||G||$ je založená na iteratívnom ohodnocovaní neterminálnych symbolov na základe prepisovacích
-	pravidiel v tvare $A \to \alpha$. Toto ohodnotenie sa navyše v každej iterácií propaguje do ďalších neterminálov
-	na základe existujúcich pravidiel v tvare $B \to \beta A \gamma$.
+\begin{mysolution}{subtasks}
+	\subtask Pred samotným popisom algoritmu zavedieme pomocné pojmy pre algoritmus.
+	\begin{itemize}
+		\item \textbf{Ohodnotenie neterminálneho symbolu $A$}, kde $A \in N$ je definované
+			ako množina $V_{A} \subseteq (\mathbb{Z} \cup \{-\infty, \infty\})$.
+		\item \textbf{Váha neterminálneho symbolu $A$}, kde $A \in N$ je definovaná ako
+			$\text{min}(V_{A})$ a značí sa ako $||A||$.
+		\item \textbf{Váha vetnej formy $\alpha$}, kde
+			$\alpha = X_{1}X_{2}...X_{n}$ a $X_{i} \in (N \cup \Sigma), i \in \{1,...,n\}$,
+			je definovaná ako $||\alpha|| = \sum\limits_{i=1}^{n} X_{i}$.
+	\end{itemize}
+	Samotný algoritmus je nasledovný.
+	\begin{enumerate}[label=\arabic*)]
+		\item Zavedieme počiatočné ohodnotenie $V_{A} = \{\infty\}$ pre každý neterminál $A \in N$.
+			Vytvoríme množinu $R_{0} \subseteq P$, do ktorej umiestnime len tie prepisovacie
+			pravidlá z $P$, ktoré sú v tvare $A \to w, w \in \Sigma^{*}$.
+		\item Nech je $i = 0$.
+		\item Pre všetky prepisovacie pravidlá $A \to \alpha \in R_{i}$, vykonávaj nasledovné,
+			pokiaľ $R_{i} \not= \varnothing$.
+			\begin{enumerate}[label=\roman*)]
+				\item Ak $||\alpha|| < ||A||$, tak $V_{A} = V_{A} \cup \{||\alpha||\}$ a do
+					$R_{i+1}$ pridaj všetky pravidlá z $P$ v tvare $B \to \beta A\gamma$,
+					kde $B \in N$ a $\beta,\gamma \in (N \cup \Sigma)^{*}$, inak len pokračuj
+					daľej.
+				\item Zvýš $i$ o hodnotu $1$ a pokračuj v cykle.
+			\end{enumerate}
+		\item Váha gramatiky $||G||$ je potom daná váhou štartovacieho neterminálu $||S||$.
+	\end{enumerate}
+	Zápis algoritmu v pseudokóde s použitím formálnych matematických zápisov, by vyzeral nasledovne
+	\newpage
+	\begin{flalign*}
+		&\forall A \in N : V_{A} := \{\infty\} & \\
+		&R_{0} := \{A \to w \in P \pipesep w \in \Sigma^{*}\} & \\
+		&i := 0 & \\
+		&\forall (A \to \alpha) \in R_{i}: & \\
+		&\hspace{1cm} \texttt{if}\ ||\alpha|| < ||A||\ \texttt{then} & \\
+		&\hspace{2cm} V_{A} := V_{A} \cup \{||\alpha||\} & \\
+		&\hspace{2cm} R_{i+1} := R_{i+1} \cup
+			\{B \to \beta A \gamma \in P \pipesep B \in N \land \beta,\gamma
+			\in (N \cup \Sigma)^{*}\} & \\
+		&\hspace{2cm} i := i + 1 & \\
+		&\hspace{1cm} \texttt{endif} & \\
+		&||G|| := ||S|| &
+	\end{flalign*}
+	\subtask V prípade celých čísel je nutné zaviesť dodatočné pojmy pre novú verziu algoritmu.
+	\begin{itemize}
+		\item \textbf{Index prepisovacieho pravidla} je definovaný podľa bijektívneho zobrazenia
+			$idx: P \leftrightarrow I$, kde $I = \{1,...,|P|\}$.
+		\item \textbf{Ohodnocovacie pravidlo neterminálu $A$} je definované ako
+			$v_{A}$, kde $A \in N$, a $v_{A} \in I$.
+	\end{itemize}
 \end{mysolution}
 
 \task{4}{Dokážte formálne, že $L \subseteq L(G)$, kde
