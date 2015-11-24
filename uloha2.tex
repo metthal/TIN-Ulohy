@@ -74,17 +74,17 @@
 		\item $vwx$ sa nachádza na rozhraní symbolov $c,d$
 	\end{enumerate}
 
-	Najskôr vyriešime prípad číslo 1. Vieme, že pokiaľ $uv^{i}wx^{i}y$ má patriť
-	do $L$, tak je to ekvivalentné tomu, že $a^{p + (i-1)|vx|}b^{p}c^{p}d^{p}$ má
-	patriť do $L$. Pokiaľ položíme $i = 0$, tak $a^{p - |vx|}b^{p}c^{p}d^{p}$ má
-	patriť do $L$. Vieme však, že musí platiť $\#_{a}(z) = \#_{c}(z)$. Potom hľadáme
+	Najskôr vyriešime prípad číslo 1. Musíme ukázať, že $\forall i \ge 0: uv^{i}wx^{i}y \in L$.
+	To je to ekvivalentné tomu, že $\forall i \ge 0: a^{p + (i-1)|vx|}b^{p}c^{p}d^{p} \in L$.
+	Pokiaľ položíme $i = 0$, tak dostávame $uv^{0}wx^{0}y = a^{p - |vx|}b^{p}c^{p}d^{p}$.
+	Vieme, že musí platiť $\#_{a}(z) = \#_{c}(z)$. Potom hľadáme
 	také $|vx|$, aby platilo $p - |vx| = p$. To však platí výhradne pre $|vx| = 0$. Z podmienok
-	pumping lemmy však vieme, že $vx \not= \varepsilon$, a teda $|vx| \not= 0$. To je
-	spor.
+	pumping lemmy však vieme, že $vx \not= \varepsilon$, a teda $|vx| \not= 0$. 
+	Z toho vyplýva, že $uv^{0}wx^{0}y \not\in L$. Tým pádom sa dostávame do sporu.
 
 	Prípady 2,3 a 4 sú analogické ku 1. V prípade číslo 3, by sme len určili reťazec
 	$uv^{i}wx^{i}y$ ako $a^{p}b^{p}c^{p + (i-1)|vx|}d^{p}$ a znova by sme dospeli k rovnakému
-	sporu. V prípadoch číslo 3 a 4 by sme analogicky určili reťazce rovnako ako pre dvojicu
+	sporu. V prípadoch číslo 2~a~4 by sme analogicky určili reťazce rovnako ako pre dvojicu
 	$a,c$ a vychádzali z toho, že $\#_{b}(z) = \#_{d}(z)$. Dospejeme k rovnakému sporu.
 
 	V prípadoch čislo 5,6 a 7 zanedbáme také tvary reťazca $uvwxy$, kedy podreťazec $v$ alebo $x$
@@ -94,7 +94,7 @@
 	sa $vwx$ nachádza, je súčasťou podreťazca $w$.
 
 	V prípade číslo 5 môžeme zapísať, že $uv^{i}wx^{i}y$ odpovedá $a^{p + (i-1)|v|}b^{p + (i-1)|x|}c^{p}d^{p}$.
-	Položmé $i = 0$. Potom možeme zapísať, že $uv^{0}wx^{0}y = a^{p - |v|}b^{p - |x|}c^{p}d^{p}$.
+	Položme $i = 0$. Potom možeme zapísať, že $uv^{0}wx^{0}y = a^{p - |v|}b^{p - |x|}c^{p}d^{p}$.
 	Hľadáme teda také $|v|$ a $|x|$, aby platilo $p - |v| = p$ a zároveň $p - |x| = p$, pretože vieme, že
 	musí platiť $\#_{a}(z) = \#_{c}(z)$ a $\#_{b}(z) = \#_{d}(z)$. To platí len pre $|v| = 0$ a $|x| = 0$.
 	Z toho ale vyplýva, že aj $|vx| = 0$. Z podmienok pumping lemmy ale musí platiť $vx \not= \varepsilon$
@@ -119,11 +119,11 @@
 \begin{mysolution}{subtasks}
 	\subtask Podľa vety 3.23 vieme, že trieda regulárnych jazykov $\mathcal{L}_{3}$
 	tvorí množinovú Booleovu algebru. Rozdiel
-	$L \setminus L'$ si potom môžeme vyjadriť nasledovne.
+	$L \setminus L'$ pritom môžeme vyjadriť nasledovne.
 	\begin{equation*}
 		L \setminus L' = L \cap \overline{L'}
 	\end{equation*}
-	Z Booleovej algebry plynie uzavretosť voči komplementu a prieniku. Tým pádom
+	Z Booleovej algebry plynie uzavretosť voči komplementu (doplnku) a prieniku. Tým pádom
 	$L \setminus L'$ je jazyk regulárny. $L \setminus L'$ je teda nutne bezkotextový.
 
 	\subtask Použitím DeMorganových zákonov vyjadríme $L \setminus L'$ ako
@@ -142,10 +142,10 @@
 	gramatikou $G = (N_{1} \cup N_{2} \cup \{S\}, \Sigma_{1} \cup \Sigma_{2},
 	P_{1} \cup P_{2} \cup \{S \to S_{1}|S_{2}\}, S)$. Musí ale platiť podmienka, že
 	$N_{1} \cap N_{2} = \varnothing$. Nakoľko gramatika $G$ obsahuje prepisovacie pravidlá
-	v tvare $A \to \alpha$, kde $A \in N, \alpha \in (N \cup \Sigma)^{*}$, ktorý definuje
+	v tvare $A \to \alpha$, kde $A \in N, \alpha \in (N \cup \Sigma)^{*}$, ktoré definujú
 	gramatiku typu 2 podľa Chomského klasifikácie gramatík, tak $G$ je typu 2.
 	Jazyk $\overline{L} \cup L'$ je teda nutne bezkontextový.
-	Pokiaľ teda jazyk $\overline{L} \cup L'$ je nutne bezkontextový, tak 
+	Pokiaľ je jazyk $\overline{L} \cup L'$ nutne bezkontextový, tak 
 	podľa vety 4.24 zo študíjnej opory, bezkontextové
 	jazyky nie sú uzavrené voči doplnku. Takže $L \setminus L'$ nie je nutne bezkontextový.
 	\subtask Opäť upravíme $L \setminus L'$ na ekvivalentný tvar.
@@ -218,14 +218,17 @@
 		&\forall A \in N : V_{A} := \{\infty\} & \\
 		&R_{0} := \{A \to w \in P \pipesep w \in \Sigma^{*}\} & \\
 		&i := 0 & \\
-		&\forall (A \to \alpha) \in R_{i}: & \\
-		&\hspace{1cm} \texttt{if}\ ||\alpha|| < ||A||\ \texttt{then} & \\
-		&\hspace{2cm} V_{A} := V_{A} \cup \{||\alpha||\} & \\
-		&\hspace{2cm} R_{i+1} := R_{i+1} \cup
+		&\texttt{while}\ R_{i} \not= \varnothing & \\
+		&\hspace{1cm} \texttt{for all}\ (A \to \alpha) \in R_{i}: & \\
+		&\hspace{2cm} \texttt{if}\ ||\alpha|| < ||A||\ \texttt{then} & \\
+		&\hspace{3cm} V_{A} := V_{A} \cup \{||\alpha||\} & \\
+		&\hspace{3cm} R_{i+1} := R_{i+1} \cup
 			\{B \to \beta A \gamma \in P \pipesep B \in N \land \beta,\gamma
 			\in (N \cup \Sigma)^{*}\} & \\
-		&\hspace{2cm} i := i + 1 & \\
-		&\hspace{1cm} \texttt{endif} & \\
+		&\hspace{2cm} \texttt{endif} & \\
+		&\hspace{1cm} \texttt{endfor} & \\
+		&\hspace{1cm} i := i + 1 & \\
+		&\texttt{endwhile} & \\
 		&||G|| := ||S|| &
 	\end{flalign*}
 	\subtask V prípade celých čísel je nutné zaviesť dodatočné pojmy pre novú verziu algoritmu.
@@ -233,8 +236,60 @@
 		\item \textbf{Index prepisovacieho pravidla} je definovaný podľa bijektívneho zobrazenia
 			$idx: P \leftrightarrow I$, kde $I = \{1,...,|P|\}$.
 		\item \textbf{Ohodnocovacie pravidlo neterminálu $A$} je definované ako
-			$v_{A}$, kde $A \in N$, a $v_{A} \in I$.
+			$v_{A}$, kde $A \in N$, a $v_{A} \in (I \cup \{0\})$.
 	\end{itemize}
+	Algoritmus bude rozšírený o priraďovanie ohodnocovacieho pravidla jednotlivým neterminálom.
+	Celkový algoritmus je potom nasledovný.
+	\begin{enumerate}[label=\arabic*)]
+		\item Zavedieme počiatočné ohodnotenie $V_{A} = \{\infty\}$ a počiatočné
+			ohodnocovacie pravidlo $v_{A} = 0$ pre každý neterminál $A \in N$.
+			Vytvoríme množinu $R_{0} \subseteq P$, do ktorej umiestnime len tie prepisovacie
+			pravidlá z $P$, ktoré sú v tvare $A \to w, w \in \Sigma^{*}$.
+		\item Nech je $i = 0$.
+		\item Pre všetky prepisovacie pravidlá $A \to \alpha \in R_{i}$, vykonávaj nasledovné,
+			pokiaľ $R_{i} \not= \varnothing$.
+			\begin{enumerate}[label=\roman*)]
+				\item Ak $||\alpha|| < ||A||$ a $idx(A \to \alpha) \not= v_{A}$,
+					tak $V_{A} = V_{A} \cup \{||\alpha||\}$ a do
+					$R_{i+1}$ pridaj všetky pravidlá z $P$ v tvare $B \to \beta A\gamma$,
+					kde $B \in N$ a $\beta,\gamma \in (N \cup \Sigma)^{*}$ a $v_{A}$ nastav
+					na $idx(A \to \alpha)$.
+				\item Inak, ak $||\alpha|| < ||A||$ a $idx(A \to \alpha) = v_{A}$,
+					tak $V_{A} = V_{A} \cup \{-\infty\}$ a do
+					$R_{i+1}$ pridaj všetky pravidlá z $P$ v tvare $B \to \beta A\gamma$,
+					kde $B \in N$ a $\beta,\gamma \in (N \cup \Sigma)^{*}$. Inak
+					len pokračuj ďalej.
+				\item Zvýš $i$ o hodnotu $1$ a pokračuj v cykle.
+			\end{enumerate}
+		\item Váha gramatiky $||G||$ je potom daná váhou štartovacieho neterminálu $||S||$.
+	\end{enumerate}
+	Zápis algoritmu v pseudokóde s použitím formálnych matematických zápisov, by vyzeral nasledovne
+	\newpage
+	\begin{flalign*}
+		&\forall A \in N : V_{A} := \{\infty\}, v_{A} := 0 & \\
+		&R_{0} := \{A \to w \in P \pipesep w \in \Sigma^{*}\} & \\
+		&i := 0 & \\
+		&\texttt{while}\ R_{i} \not= \varnothing & \\
+		&\hspace{1cm} \texttt{for all}\ (A \to \alpha) \in R_{i}: & \\
+		&\hspace{2cm} \texttt{if}\ ||\alpha|| < ||A||\ \texttt{then} & \\
+		&\hspace{3cm} \texttt{if}\ v_{A} \not= idx(A \to \alpha)\ \texttt{then} & \\
+		&\hspace{4cm} V_{A} := V_{A} \cup \{||\alpha||\} & \\
+		&\hspace{4cm} R_{i+1} := R_{i+1} \cup
+			\{B \to \beta A \gamma \in P \pipesep B \in N \land \beta,\gamma
+			\in (N \cup \Sigma)^{*}\} & \\
+		&\hspace{4cm} v_{A} := idx(A \to \alpha) & \\
+		&\hspace{3cm} \texttt{else if}\ v_{A} = idx(A \to \alpha)\ \texttt{then} & \\
+		&\hspace{4cm} V_{A} := V_{A} \cup \{-\infty\} & \\
+		&\hspace{4cm} R_{i+1} := R_{i+1} \cup
+			\{B \to \beta A \gamma \in P \pipesep B \in N \land \beta,\gamma
+			\in (N \cup \Sigma)^{*}\} & \\
+		&\hspace{3cm} \texttt{endif} & \\
+		&\hspace{2cm} \texttt{endif} & \\
+		&\hspace{1cm} \texttt{endfor} & \\
+		&\hspace{1cm} i := i + 1 & \\
+		&\texttt{endwhile} & \\
+		&||G|| := ||S|| &
+	\end{flalign*}
 \end{mysolution}
 
 \task{4}{Dokážte formálne, že $L \subseteq L(G)$, kde
@@ -316,13 +371,13 @@
 \begin{mysolution}{subtasks}
 	\subtask Podľa definície 4.5 zo študíjnej opory hovoríme, že veta $w$ generovaná gramatikou $G$
 	je viacznačná, pokiaľ existujú aspoň 2 rôzne derivačné stromy s koncovými uzlami tvoriacmi vetu $w$.
-	Gramatiku $G$ potom nazýva viacznačná, pokiaľ generuje aspoň jednu viacznačnú vetu. Stačí nám teda
+	Gramatika $G$ sa potom nazýva viacznačná, pokiaľ generuje aspoň jednu viacznačnú vetu. Stačí nám teda
 	vygenerovať gramatikou $G$ nejakú vetu, pre ktorú vieme zostrojiť aspoň 2 derivačné stromy a tým
 	dokázať jej viacznačnosť. Takou vetou je napríklad veta
 	\begin{equation*}
 	\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com
 	\end{equation*}
-	Táto veta mohla vzniknúť dvoma možnými deriváciami, ktoré odpovedajú dvom možným derivačným stromom.
+	Táto veta mohla vzniknúť dvoma možnými deriváciami, ktoré odpovedajú dvom možným derivačným stromom. Gramatika $G$ je preto viacznačná.
 	\begin{figure}[!h]
 		\centering
 		\begin{minipage}[b]{0.45\textwidth}
@@ -532,7 +587,7 @@
 				\node[state, accepting, right of = q3] (q4) {$q_{4}$};
 				\node[state, below of = q4] (q5) {$q_{5}$};
 
-				\path (q1) edge node[above]{\small$\textbf{if},Z/\textbf{if}$} (q2);
+				\path (q1) edge node[above]{\small$\textbf{if},Z/\textbf{if}\ Z$} (q2);
 				\path (q2) edge node[above]{\small$cond,\textbf{if}/\textbf{if}$} (q3);
 				\path (q3) edge[bend right=60] node[above]{\small$\textbf{if},\textbf{if}/\textbf{if\ if}$} (q2);
 				\path (q3) edge node[above]{\small$com,\textbf{if}/\textbf{if}$} (q4);
