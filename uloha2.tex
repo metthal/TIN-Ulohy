@@ -78,7 +78,7 @@
 	To je to ekvivalentné tomu, že $\forall i \ge 0: a^{p + (i-1)|vx|}b^{p}c^{p}d^{p} \in L$.
 	Pokiaľ položíme $i = 0$, tak dostávame $uv^{0}wx^{0}y = a^{p - |vx|}b^{p}c^{p}d^{p}$.
 	Vieme, že musí platiť $\#_{a}(z) = \#_{c}(z)$. Potom hľadáme
-	také $|vx|$, aby platilo $p - |vx| = p$. To však platí výhradne pre $|vx| = 0$. Z podmienok
+	také $|vx|$, aby platilo $p - |vx| = p$. To však platí výhradne pre $|vx| = 0$. Z~podmienok
 	pumping lemmy však vieme, že $vx \not= \varepsilon$, a teda $|vx| \not= 0$. 
 	Z toho vyplýva, že $uv^{0}wx^{0}y \not\in L$. Tým pádom sa dostávame do sporu.
 
@@ -155,7 +155,7 @@
 	Vzhľadom na to, že trieda regulárnych jazykov $\mathcal{L}_{3}$ tvorí množinovú
 	Booleovu algebru, tak jazyk $\overline{L'}$ je opäť regulárny, kvôli uzavretosti
 	komplementu. Podľa vety 4.22 zo študíjnej opory, bezkontextové jazyky sú uzavreté
-	voči prieniku s regulárnymi jazkykmi. $L \setminus L'$ je teda v tomto prípade nutne
+	voči prieniku s regulárnymi jazykmi. $L \setminus L'$ je teda v tomto prípade nutne
 	bezkontextový jazyk.
 	\subtask Pokiaľ má platiť, že bezkontextové jazyky majú byť uzavreté voči rozdielu,
 	tak musí platiť, že $L \setminus (L \setminus L')$ je tiež bezkontextový jazyk.
@@ -195,31 +195,24 @@
 			$\alpha = X_{1}X_{2}...X_{n}$ a $X_{i} \in (N \cup \Sigma), i \in \{1,...,n\}$,
 			je definovaná ako $||\alpha|| = \sum\limits_{i=1}^{n} X_{i}$.
 	\end{itemize}
-	Samotný algoritmus je nasledovný.
-	\begin{enumerate}[label=\arabic*)]
-		\item Zavedieme počiatočné ohodnotenie $V_{A} = \{\infty\}$ pre každý neterminál $A \in N$.
-			Vytvoríme množinu $R_{0} \subseteq P$, do ktorej umiestnime len tie prepisovacie
-			pravidlá z $P$, ktoré sú v tvare $A \to w, w \in \Sigma^{*}$.
-		\item Nech je $i = 0$.
-		\item Pre všetky prepisovacie pravidlá $A \to \alpha \in R_{i}$, vykonávaj nasledovné,
-			pokiaľ $R_{i} \not= \varnothing$.
-			\begin{enumerate}[label=\roman*)]
-				\item Ak $||\alpha|| < ||A||$, tak $V_{A} = V_{A} \cup \{||\alpha||\}$ a do
-					$R_{i+1}$ pridaj všetky pravidlá z $P$ v tvare $B \to \beta A\gamma$,
-					kde $B \in N$ a $\beta,\gamma \in (N \cup \Sigma)^{*}$, inak len pokračuj
-					daľej.
-				\item Zvýš $i$ o hodnotu $1$ a pokračuj v cykle.
-			\end{enumerate}
-		\item Váha gramatiky $||G||$ je potom daná váhou štartovacieho neterminálu $||S||$.
-	\end{enumerate}
-	Zápis algoritmu v pseudokóde s použitím formálnych matematických zápisov, by vyzeral nasledovne
-	\newpage
+	Algoritmus funguje na princípe postupné ohodnocovanie neterminálnych symbolov na základe
+	pravidiel v gramatike, pričom sa začína od pravidiel generujúcich len reťazec skladajúce
+	sa z terminálnych symbolov a vykonáva sa pokým sa ohodnotenie neterminálov mení.
+	Pokiaľ sa nejakému neterminálu zmení ohodnotenie, tak v ďaľšej iterácií budú spracované
+	všetky pravidlá obsahujúce tento neterminál na pravej strane svojich pravidiel.
+	Množina pravidiel ktoré sa aktuálne spracúvajú je označená $R_{i}$, kde $i$ odpovedá
+	indexu iterácie. Predpokladá sa, že každá množina $R_{i}$ je zpočiatku prázdna.
+	Zápis algoritmu v pseudokóde s použitím formálnych matematických zápisov,
+	by vyzeral nasledovne. (Na ďalšej strane)
+
 	\begin{flalign*}
-		&\forall A \in N : V_{A} := \{\infty\} & \\
+		&\texttt{for all}\ A \in N & \\
+		&\hspace{1cm} V_{A} := \{\infty\} & \\
+		&\texttt{endfor} & \\
 		&R_{0} := \{A \to w \in P \pipesep w \in \Sigma^{*}\} & \\
 		&i := 0 & \\
 		&\texttt{while}\ R_{i} \not= \varnothing & \\
-		&\hspace{1cm} \texttt{for all}\ (A \to \alpha) \in R_{i}: & \\
+		&\hspace{1cm} \texttt{for all}\ (A \to \alpha) \in R_{i} & \\
 		&\hspace{2cm} \texttt{if}\ ||\alpha|| < ||A||\ \texttt{then} & \\
 		&\hspace{3cm} V_{A} := V_{A} \cup \{||\alpha||\} & \\
 		&\hspace{3cm} R_{i+1} := R_{i+1} \cup
@@ -231,61 +224,42 @@
 		&\texttt{endwhile} & \\
 		&||G|| := ||S|| &
 	\end{flalign*}
-	\subtask V prípade celých čísel je nutné zaviesť dodatočné pojmy pre novú verziu algoritmu.
-	\begin{itemize}
-		\item \textbf{Index prepisovacieho pravidla} je definovaný podľa bijektívneho zobrazenia
-			$idx: P \leftrightarrow I$, kde $I = \{1,...,|P|\}$.
-		\item \textbf{Ohodnocovacie pravidlo neterminálu $A$} je definované ako
-			$v_{A}$, kde $A \in N$, a $v_{A} \in (I \cup \{0\})$.
-	\end{itemize}
-	Algoritmus bude rozšírený o priraďovanie ohodnocovacieho pravidla jednotlivým neterminálom.
-	Celkový algoritmus je potom nasledovný.
-	\begin{enumerate}[label=\arabic*)]
-		\item Zavedieme počiatočné ohodnotenie $V_{A} = \{\infty\}$ a počiatočné
-			ohodnocovacie pravidlo $v_{A} = 0$ pre každý neterminál $A \in N$.
-			Vytvoríme množinu $R_{0} \subseteq P$, do ktorej umiestnime len tie prepisovacie
-			pravidlá z $P$, ktoré sú v tvare $A \to w, w \in \Sigma^{*}$.
-		\item Nech je $i = 0$.
-		\item Pre všetky prepisovacie pravidlá $A \to \alpha \in R_{i}$, vykonávaj nasledovné,
-			pokiaľ $R_{i} \not= \varnothing$.
-			\begin{enumerate}[label=\roman*)]
-				\item Ak $||\alpha|| < ||A||$ a $idx(A \to \alpha) \not= v_{A}$,
-					tak $V_{A} = V_{A} \cup \{||\alpha||\}$ a do
-					$R_{i+1}$ pridaj všetky pravidlá z $P$ v tvare $B \to \beta A\gamma$,
-					kde $B \in N$ a $\beta,\gamma \in (N \cup \Sigma)^{*}$ a $v_{A}$ nastav
-					na $idx(A \to \alpha)$.
-				\item Inak, ak $||\alpha|| < ||A||$ a $idx(A \to \alpha) = v_{A}$,
-					tak $V_{A} = V_{A} \cup \{-\infty\}$ a do
-					$R_{i+1}$ pridaj všetky pravidlá z $P$ v tvare $B \to \beta A\gamma$,
-					kde $B \in N$ a $\beta,\gamma \in (N \cup \Sigma)^{*}$. Inak
-					len pokračuj ďalej.
-				\item Zvýš $i$ o hodnotu $1$ a pokračuj v cykle.
-			\end{enumerate}
-		\item Váha gramatiky $||G||$ je potom daná váhou štartovacieho neterminálu $||S||$.
-	\end{enumerate}
-	Zápis algoritmu v pseudokóde s použitím formálnych matematických zápisov, by vyzeral nasledovne
 	\newpage
+	\subtask V prípade celých čísel je nutné zmodifikovať algoritmus.
+	Algoritmus je rozšírený o~ukladanie už spracovaných množín pravidiel $R_{i}$ do množiny
+	$H \subseteq 2^{P}$. Pokiaľ
+	je spracovávaná nejaká množina $R_{i}$, ktorá je totožná už s inou spracovanou množinou,
+	tak je táto skutočnosť považovaná za prítomnosť cyklu v gramatike a heuristicky
+	sú označené neterminály na ľavej strane pravidiel v $R_{i}$ ohodnotením $-\infty$.
+	Zápis algoritmu v pseudokóde s použitím formálnych matematických zápisov,
+	by vyzeral nasledovne.
 	\begin{flalign*}
-		&\forall A \in N : V_{A} := \{\infty\}, v_{A} := 0 & \\
+		&\texttt{for all}\ A \in N & \\
+		&\hspace{1cm} V_{A} := \{\infty\} & \\
+		&\texttt{endfor} & \\
 		&R_{0} := \{A \to w \in P \pipesep w \in \Sigma^{*}\} & \\
 		&i := 0 & \\
+		&H := \{\varnothing\} & \\
 		&\texttt{while}\ R_{i} \not= \varnothing & \\
-		&\hspace{1cm} \texttt{for all}\ (A \to \alpha) \in R_{i}: & \\
-		&\hspace{2cm} \texttt{if}\ ||\alpha|| < ||A||\ \texttt{then} & \\
-		&\hspace{3cm} \texttt{if}\ v_{A} \not= idx(A \to \alpha)\ \texttt{then} & \\
-		&\hspace{4cm} V_{A} := V_{A} \cup \{||\alpha||\} & \\
-		&\hspace{4cm} R_{i+1} := R_{i+1} \cup
-			\{B \to \beta A \gamma \in P \pipesep B \in N \land \beta,\gamma
-			\in (N \cup \Sigma)^{*}\} & \\
-		&\hspace{4cm} v_{A} := idx(A \to \alpha) & \\
-		&\hspace{3cm} \texttt{else if}\ v_{A} = idx(A \to \alpha)\ \texttt{then} & \\
+		&\hspace{1cm} \texttt{if}\ R_{i} \in H\ \texttt{then} & \\
+		&\hspace{2cm} \texttt{for all}\ (A \to \alpha) \in R_{i} & \\
+		&\hspace{3cm} \texttt{if}\ ||A|| \not= -\infty\ \texttt{then} & \\
 		&\hspace{4cm} V_{A} := V_{A} \cup \{-\infty\} & \\
 		&\hspace{4cm} R_{i+1} := R_{i+1} \cup
 			\{B \to \beta A \gamma \in P \pipesep B \in N \land \beta,\gamma
 			\in (N \cup \Sigma)^{*}\} & \\
 		&\hspace{3cm} \texttt{endif} & \\
+		&\hspace{2cm} \texttt{endfor} & \\
+		&\hspace{1cm} \texttt{endif} & \\
+		&\hspace{1cm} \texttt{for all}\ (A \to \alpha) \in R_{i} & \\
+		&\hspace{2cm} \texttt{if}\ ||\alpha|| < ||A||\ \texttt{then} & \\
+		&\hspace{3cm} V_{A} := V_{A} \cup \{||\alpha||\} & \\
+		&\hspace{3cm} R_{i+1} := R_{i+1} \cup
+			\{B \to \beta A \gamma \in P \pipesep B \in N \land \beta,\gamma
+			\in (N \cup \Sigma)^{*}\} & \\
 		&\hspace{2cm} \texttt{endif} & \\
 		&\hspace{1cm} \texttt{endfor} & \\
+		&\hspace{1cm} H := H \cup \{R_{i}\} & \\
 		&\hspace{1cm} i := i + 1 & \\
 		&\texttt{endwhile} & \\
 		&||G|| := ||S|| &
@@ -344,8 +318,8 @@
 			\begin{equation*}
 				S \Rightarrow 0S1^{k} \Rightarrow^{i+1} 00^{i}1^{j}1^{k}
 			\end{equation*}
-			$00^{i}1^{j}1^{k}$ sa ale rovná $0^{i+1}1^{j+k}$, a teda platí aj pôvodné
-			tvrdenie
+			$00^{i}1^{j}1^{k}$ sa ale rovná $0^{i+1}1^{j+k}$, a teda platí aj indukčný
+			krok. 
 			\begin{equation*}
 				S \Rightarrow^{i+2} 0^{i+1}1^{j+k}
 			\end{equation*}
@@ -503,7 +477,7 @@
 		S' &\to \textbf{if}\ cond\ S'\ \textbf{else}\ S' \pipesep com
 	\end{align*}
 	Táto gramatika rieši spomínaný problém tak, že vždy spáruje najbližšií \textbf{if}-\textbf{else} a tým povoluje tvorbu
-	len jednej z možných derivácií. Veta $\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com$ má v tejto gramatike
+	len jednej z možných derivácií. Veta $\textbf{if}\ cond\ \textbf{if}\ cond\ com\ \textbf{else}\ com$ má v~tejto gramatike
 	len jediný derivačný strom a to nasledovný. Môžeme teda predpokladať, aj keď bez dôkazu, že tento jazyk je bez inherentnej viacznačnosti.
 	\begin{figure}[!h]
 		\centering
