@@ -193,17 +193,26 @@
 			$\text{min}(V_{A})$ a značí sa ako $||A||$.
 		\item \textbf{Váha vetnej formy $\alpha$}, kde
 			$\alpha = X_{1}X_{2}...X_{n}$ a $X_{i} \in (N \cup \Sigma), i \in \{1,...,n\}$,
-			je definovaná ako $||\alpha|| = \sum\limits_{i=1}^{n} X_{i}$.
+			je definovaná ako $||\alpha|| = \sum\limits_{i=1}^{n} ||X_{i}||$.
 	\end{itemize}
-	Algoritmus funguje na princípe postupné ohodnocovanie neterminálnych symbolov na základe
-	pravidiel v gramatike, pričom sa začína od pravidiel generujúcich len reťazec skladajúce
-	sa z terminálnych symbolov a vykonáva sa pokým sa ohodnotenie neterminálov mení.
-	Pokiaľ sa nejakému neterminálu zmení ohodnotenie, tak v ďaľšej iterácií budú spracované
-	všetky pravidlá obsahujúce tento neterminál na pravej strane svojich pravidiel.
-	Množina pravidiel ktoré sa aktuálne spracúvajú je označená $R_{i}$, kde $i$ odpovedá
-	indexu iterácie. Predpokladá sa, že každá množina $R_{i}$ je zpočiatku prázdna.
-	Zápis algoritmu v pseudokóde s použitím formálnych matematických zápisov,
-	by vyzeral nasledovne. (Na ďalšej strane)
+	Algoritmus funguje na princípe postupného ohodnocovania neterminálnych symbolov na základe
+	pravidiel v gramatike. Najskôr sa však zavedie počiatočné ohodnotenie neterminálov na hodnotu
+	$\{\infty\}$. V množine prepisovacích pravidiel $P$ sú najskôr vybrané tie pravidlá, ktoré generujú
+	reťazce skladajúce
+	sa výhradne z terminálnych symbolov. Tie sú uložené do množiny $R_{0}$.
+	Z týchto pravidiel v tvare $A \to w \in R_{0}$, kde
+	$A \in N, w \in \Sigma^{*}$, sa vypočíta $||w||$ a ohodnotí sa neterminál $A$ hodnotou
+	$||w||$. Následne sa nájdu v gramatike všetky pravidlá, v ktorých sa $A$ nachádza na pravej
+	strane pravidla. Tie sa uložia do $R_{i+1}$, kde $i$ je počítadlo iterácií.
+	Pokiaľ žiadne také pravidlá v gramatike nie sú, algoritmus končí. V prípade, že také pravidlá existujú,
+	sa v ďalšej iterácií algoritmu prechádzajú tieto pravidlá majúce tvar $B \to \alpha$, kde
+	$B \in N, \alpha \in (N \cup \Sigma)^{*}$. Neterminál $B$ je ohodnotený na základe
+	váhy vetnej formy $||\alpha||$, ale len v prípade, že by táto váha $||\alpha||$ zmenšila
+	váhu $||B||$. U všetkých neterminálov, u ktorých došlo k zmene ohodnotenia, sa
+	opäť pripraví množina všetkých pravidiel obsahujúca neterminál $B$ na pravej strane pravidla.
+	Algoritmus končí v momente, keď je táto množina prázdna. Váhou gramatiky $||G||$ je potom
+	váha štartovacieho neterminálu $||S||$. Algoritmus v pseudokóde s použitím matematických
+	zápisov je možné nájsť na ďalšej strane.
 
 	\begin{flalign*}
 		&\texttt{for all}\ A \in N & \\
@@ -224,15 +233,18 @@
 		&\texttt{endwhile} & \\
 		&||G|| := ||S|| &
 	\end{flalign*}
-	\newpage
 	\subtask V prípade celých čísel je nutné zmodifikovať algoritmus.
 	Algoritmus je rozšírený o~ukladanie už spracovaných množín pravidiel $R_{i}$ do množiny
 	$H \subseteq 2^{P}$. Pokiaľ
-	je spracovávaná nejaká množina $R_{i}$, ktorá je totožná už s inou spracovanou množinou,
-	tak je táto skutočnosť považovaná za prítomnosť cyklu v gramatike a heuristicky
-	sú označené neterminály na ľavej strane pravidiel v $R_{i}$ ohodnotením $-\infty$.
-	Zápis algoritmu v pseudokóde s použitím formálnych matematických zápisov,
-	by vyzeral nasledovne.
+	je spracovávaná nejaká množina $R_{i}$, ktorá je totožná už s inou spracovanou množinou
+	v $H$, tak je to považované za prítomnosť cyklu so stále klesajúcim ohodnotením.
+	Heuristicky je potom možné označiť odpovedajúce neterminály ohodnotením $\{-\infty\}$.
+	Preskúma sa váha lavých strán pravidiel $A \to \alpha \in R_{i}$, teda váha $||A||$
+	a pokiaľ ešte nie je $-\infty$, tak sa táto váha nastaví a do $R_{i+1}$ sú
+	pridané všetky pravidlá z $P$ obsahujúce $A$ na pravej strane, kvôli propagácií
+	tejto váhy ďalej v gramatike. Zvyšok algoritmu je totožný s verziou v (a). Algoritmus
+	je znázornený na ďalšej strane.
+	\newpage
 	\begin{flalign*}
 		&\texttt{for all}\ A \in N & \\
 		&\hspace{1cm} V_{A} := \{\infty\} & \\
@@ -264,6 +276,68 @@
 		&\texttt{endwhile} & \\
 		&||G|| := ||S|| &
 	\end{flalign*}
+
+	Ukážeme, ako by prebiehal výpočet váhy gramatiky $G_{1} = (\{S,A,B,D\},\{-2,-1,3,5\},P,S)$.
+	\begin{flalign*}
+		P:&\ S \to A D & \\
+		  &\ A \to -1A-2 \pipesep B & \\
+		  &\ B \to 3B \pipesep 3 & \\
+		  &\ D \to -2D \pipesep 5 &
+	\end{flalign*}
+
+	\newpage
+	\begin{itemize}
+		\item 0. iterácia
+		\begin{itemize}
+			\item $H = \{\varnothing\}$
+			\item $V_{S} = \{\infty\}, V_{A} = \{\infty\}, V_{B} = \{\infty\}, V_{D} = \{\infty\}$
+			\item $R_{0} = \{B \to 3, D \to 5\}$
+		\end{itemize}
+		\item 1. iterácia
+		\begin{itemize}
+			\item $H = \{\varnothing, \{B \to 3, D \to 5\}\}$
+			\item $V_{S} = \{\infty\}, V_{A} = \{\infty\}, V_{B} = \{\infty, 3\},
+				V_{D} = \{\infty, 5\}$
+			\item $R_{1} = \{A \to B, B \to 3B, S \to AD, D \to -2D\}$
+		\end{itemize}
+		\item 2. iterácia
+		\begin{itemize}
+			\item $H = \{\varnothing, \{B \to 3, D \to 5\},
+				\{A \to B, B \to 3B, S \to AD, D \to -2D\}\}$
+			\item $V_{S} = \{\infty, 8\}, V_{A} = \{\infty, 3\},
+				V_{B} = \{\infty, 3\}, V_{D} = \{\infty, 5, 3\}$
+			\item $R_{2} = \{S \to AD, A \to -1A-2, D \to -2D\}$
+		\end{itemize}
+		\item 3. iterácia
+		\begin{itemize}
+			\item $H = \{\varnothing, \{B \to 3, D \to 5\},
+				\{A \to B, B \to 3B, S \to AD, D \to -2D\},\\
+				\{S \to AD, A \to -1A-2, D \to -2D\}\}$
+			\item $V_{S} = \{\infty, 8, 6\}, V_{A} = \{\infty, 3, 0\},
+				V_{B} = \{\infty, 3\}, V_{D} = \{\infty, 5, 3, 1\}$
+			\item $R_{3} = \{S \to AD, A \to -1A-2, D \to -2D\}$
+		\end{itemize}
+		\item 4. iterácia
+		\begin{itemize}
+			\item V tejto iterácií dôjde k dedekcií cyklu so stále klesajúcim ohodnotením.
+			\item $H = \{\varnothing, \{B \to 3, D \to 5\},
+				\{A \to B, B \to 3B, S \to AD, D \to -2D\},\\
+				\{S \to AD, A \to -1A-2, D \to -2D\}\}$
+			\item $V_{S} = \{\infty, 8, 6, -\infty\}, V_{A} = \{\infty, 3, 0, -\infty\},
+				V_{B} = \{\infty, 3\}, V_{D} = \{\infty, 5, 3, 1, -\infty\}$
+			\item $R_{4} = \{S \to AD, A \to -1A-2, D \to -2D\}$
+		\end{itemize}
+		\item 5. iterácia
+		\begin{itemize}
+			\item $H = \{\varnothing, \{B \to 3, D \to 5\},
+				\{A \to B, B \to 3B, S \to AD, D \to -2D\},\\
+				\{S \to AD, A \to -1A-2, D \to -2D\}\}$
+			\item $V_{S} = \{\infty, 8, 6, -\infty\}, V_{A} = \{\infty, 3, 0, -\infty\},
+				V_{B} = \{\infty, 3\}, V_{D} = \{\infty, 5, 3, 1, -\infty\}$
+			\item $R_{5} = \varnothing$
+		\end{itemize}
+	\end{itemize}
+	$||G|| = ||S|| = -\infty$
 \end{mysolution}
 
 \task{4}{Dokážte formálne, že $L \subseteq L(G)$, kde
@@ -562,6 +636,7 @@
 				\node[state, below of = q4] (q5) {$q_{5}$};
 
 				\path (q1) edge node[above]{\small$\textbf{if},Z/\textbf{if}\ Z$} (q2);
+				\path (q1) edge[bend left=45] node[above]{\small$com,Z/Z$} (q4);
 				\path (q2) edge node[above]{\small$cond,\textbf{if}/\textbf{if}$} (q3);
 				\path (q3) edge[bend right=60] node[above]{\small$\textbf{if},\textbf{if}/\textbf{if\ if}$} (q2);
 				\path (q3) edge node[above]{\small$com,\textbf{if}/\textbf{if}$} (q4);
