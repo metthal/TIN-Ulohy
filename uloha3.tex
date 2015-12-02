@@ -1,0 +1,172 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{ifthen}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usepackage{caption}
+\usepackage{background}
+
+\usetikzlibrary{arrows,automata,calc,positioning}
+
+\newcommand{\task}[2]{\par \noindent \textbf{{#1}.} \hspace{3pt} #2 \vspace{10pt}}
+\newcommand{\solution}{\vspace{10pt}}
+\newcommand{\pipesep}{\hspace{3pt} \vert \hspace{3pt}}
+
+\newenvironment{subtasklist}[0]{\begin{enumerate}[label=(\alph*)]}{\end{enumerate}}
+\newenvironment{mysolution}[1]{
+	\par \textbf{Riešenie} \newline
+	\ifthenelse{\equal{#1}{subtasks}}{\begin{enumerate}[label=(\alph*)]}
+			{\begin{enumerate}[label={}] \item}
+}{\end{enumerate} \newpage}
+\newcommand{\subtask}{\item}
+
+\SetBgContents{
+		\parbox{0.4\textwidth}{
+			\raggedleft
+				Marek Milkovič \\
+				\texttt{xmilko01}
+		}
+}
+\SetBgScale{0.75}
+\SetBgOpacity{1}
+\SetBgAngle{0}
+\SetBgColor{black}
+\SetBgPosition{current page.north east}
+\SetBgVshift{-0.8cm}
+\SetBgHshift{-3.5cm}
+ 
+\begin{document}
+ 
+\title{TIN 2015/2016: Úloha 3}
+\author{Marek Milkovič \\ \small\texttt{xmilko01@stud.fit.vutbr.cz}}
+\maketitle
+
+\task{1}{Zostrojte gramatiku generujúcu jazyk Turingovho stroja na obrázku. Pre nejaké slovo z tohto jazyka popíšte
+prijímajúci beh tohoto TS a deriváciu tohto slova vo vašej gramatike.
+	\begin{figure}[!h]
+		\centering
+		\begin{tikzpicture}[node distance = 2.3cm, ->, >=stealth, line width=1pt]
+			\node[state, initial, initial text=] (0) {0};
+			\node[state, right of = 0] (1) {1};
+			\node[state, right of = 1] (2) {2};
+			\node[state, above of = 2] (3) {3};
+			\node[state, right = 3cm of 2] (5) {5};
+			\node[state, above of = 5] (6) {6};
+			\node[state, below of = 5] (7) {7};
+			\node[state, right of = 7] (8) {8};
+			\node[state, accepting, right of = 8] (9) {9};
+
+			\path (0) edge node[above]{$\Delta/R$} (1);
+			\path (1) edge node[above]{$a/R$} (2);
+			\path (2) edge node[right]{$b/R$} (3);
+			\path (3) edge[loop right] node[right]{$e/R$} (3);
+			\path (3) edge[bend right] node[left]{$a/R$} (1);
+			\path (2) edge node[above]{$\Delta/L$} (5);
+			\path (5) edge node[left]{$a/\Delta$} (6);
+			\path (5) edge[bend right=70] node[right]{$b/\Delta$} (6);
+			\path (6) edge[bend right=70] node[left]{$\Delta/L$} (5);
+			\path (5) edge node[left]{$\Delta/R$} (7);
+			\path (7) edge node[above]{$\Delta/Y$} (8);
+			\path (8) edge node[above]{$Y/L$} (9);
+		\end{tikzpicture}
+	\end{figure}
+}
+
+\begin{mysolution}
+
+	\vspace{-1.5cm}
+	\begin{flalign*}
+		G &= (N,\Sigma,P,S) & \\
+		N &= \{S,A\} & \\
+		\Sigma &= \{a,b,e\} & \\
+		P&: & \\
+		  &S \to aA & \\
+		  &A \to baaA \pipesep \varepsilon &
+	\end{flalign*}
+
+	Za ľubovolné slovo zvolme slovo $abaa$. Beh TS je znázornený konfiguráciou pásky nasledovne.
+
+	\begin{align*}
+		\underline{\Delta} abaa \Delta\Delta^{\omega} && \Delta aba\underline{a} \Delta\Delta^{\omega} && \Delta ab\underline{a}\Delta \Delta\Delta^{\omega}
+		&&	\Delta \underline{a}\Delta\Delta\Delta \Delta\Delta^{\omega} && \Delta \underline{Y}\Delta\Delta\Delta \Delta\Delta^{\omega}\\
+		\Delta \underline{a}baa \Delta\Delta^{\omega} && \Delta abaa \underline{\Delta}\Delta^{\omega} && \Delta ab\underline{\Delta}\Delta \Delta\Delta^{\omega}
+		&&	\Delta \underline{\Delta}\Delta\Delta\Delta \Delta\Delta^{\omega} && \underline{\Delta} Y\Delta\Delta\Delta \Delta\Delta^{\omega}\\
+		\Delta a\underline{b}aa \Delta\Delta^{\omega} && \Delta aba\underline{a} \Delta\Delta^{\omega} && \Delta a\underline{b}\Delta\Delta \Delta\Delta^{\omega}
+		&&	\underline{\Delta} \Delta\Delta\Delta\Delta \Delta\Delta^{\omega}\\
+		\Delta ab\underline{a}a \Delta\Delta^{\omega} && \Delta aba\underline{\Delta} \Delta\Delta^{\omega} && \Delta a\underline{\Delta}\Delta\Delta \Delta\Delta^{\omega} 
+		&&	\Delta \underline{\Delta}\Delta\Delta\Delta \Delta\Delta^{\omega}
+	\end{align*}
+
+	Derivácia slova $abaa$ v gramatike $G$ je nasledovná.
+	\begin{equation*}
+		S \Rightarrow aA \Rightarrow abaaA \Rightarrow abaa
+	\end{equation*}
+\end{mysolution}
+
+\task{2}{Technikou redukcie dokážte, že problém prázdnosti jazyka daného Turingového stroja nie je ani čiastočne rozhodnuteľný.}
+
+\begin{mysolution}
+
+TODO
+\end{mysolution}
+
+\task{3}{Pre danú množinu slov $P$ povieme, že TS $P$-\emph{rozhoduje} jazyk $L$, pokiaľ pre všetky slová mimo $P$ zastaví,
+	a zo slov mimo $P$ prijíma práve tie, ktoré patria do $L$. Jazyk je potom $P$-\emph{rozhodnuteľný}, práve keď existuje TS,
+	ktorý ho $P$-\emph{rozhoduje}. Intuitívne je $P$-rozhodnuteľnosť "jednoduchšou" variantou rozhodnuteľnosti -- TS nemusí vedieť
+	rozhodnúť slová z $P$. Dokážte alebo vyvráťte nasledujúce tvrdenia:
+	\begin{subtasklist}
+		\subtask Existuje konečná množina $P$ kódov Turingových strojov, pre ktorú je \emph{HP} $P$-rozhodnuteľný.
+		\subtask Existuje nekonečná množina $P$ Turingových strojov, pre ktorú je \emph{HP} $P$-rozhodnuteľný.
+		\subtask Pre všetky nekonečné množiny $P$ Turingových strojov je \emph{HP} $P$-rozhodnuteľný.
+	\end{subtasklist}
+V bode (c) skúste vybrať vhodnú nekonečnú množinu $P$ a modifikovať pre ňu prednášaný dôkaz nerozhodnuteľnosti \emph{HP} diagonalizáciou.}
+
+	\begin{mysolution}{subtasks}
+	\subtask TODO
+	\subtask TODO
+	\subtask TODO
+	\end{mysolution}
+
+\task{4}{Rendez-vous sieť je graf, v ktorého každom uzle beží proces vykonávajúci rovnaký konečne stavový program. Procesy spojené hranou
+	(komunikačným kanálom) spolu komunikujú formou tzv. rendez-vous -- sú schopné sa atomicky (v jednom výpočetnom kroku) zhodnúť na informácií
+	komunikovanej komunikačným kanálom. Komunikačné kanály sú o\-čís\-lo\-va\-né a procesy môžu reagovať na komunikáciu rôznymi kanálmi rôzne. Pokiaľ
+	sa proces snaží o komunikáciu kanálom, na ktorého druhom konci nie je žiadny iný proces, tak je taký proces najskôr vytvorený, a potom prebehne
+	komunikácia.
+
+	Formálne je \emph{rendez-vous sieť} trojica $S = (A,P,K)$ kde $A = (Q, \Sigma \times \{1,2\}, \delta, q_{0}. F)$ je konečný automat popisujúci
+	chovanie procesov (všetky sa chovajú rovnako). Abeceda automatu je tvorená pármi, kde prvá zložka $a \in \Sigma$ je komunikovanou správou,
+	a druhá zložka, $1$ alebo $2$, je číslom komunikačného kanálu, ktorým sa má správa $a$ komunikovať. $P$ je konečná množina procesov a
+	$K \subseteq P \times \{1,2\} \times P$ je množina \emph{komunikačných kanálov} označenými číslami $1$ alebo $2$. \emph{Konfigurácia} siete
+	$S$ je dvojica $(S, stav)$, kde $stav: P \to Q$ je funkcia priradzujúca stavy procesom. Konfigurácia $(S' = (A,P',K'),stav')$ vznikne
+	\emph{výpočetným krokom} z konfigurácie $(S,stav)$, písané $(S,stav) \to (S',stav')$, v nasledujúcich dvoch prípadoch:
+
+	\begin{subtasklist}
+		\subtask Dva existujúce procesy spojené komunikačným kanálom sa dohodnú na správe. Teda $S' = S$, a pre nejaké $u,v \in P$ a $i \in \{1,2\}$
+		existuje kanál $(u,i,v) \in K$ a symbol $a \in \Sigma$ tak, že $stav'(u) \in \delta(stav(u),(a,i))$, $stav'(v) \in \delta(stav(v), (a,i))$ a
+		$stav'(w) = stav(w)$ pre všetky $w \in P$ rôzne od $u$ a $v$.
+		\subtask Nejaký proces $u \in P$ by rád komunikoval kanálom $i$, ale nie je týmto kanálom spojený so žiadnym iným procesom. V tom prípade sa
+		najprv vytvorí proces v iniciálnom stave spojený s prvým procesom kanálom $i$, a potom prebehne komunikácia ako v predchádzajúcom prípade.
+		Formálne, pre nejaké $i \in \{1,2\}$ neexistuje kanál $(u',i,u'') \in K$ kde $u = u'$ alebo $u = u''$, $P' = P \cup \{v\}$ kde $v \not\in P$
+		je nový proces, $K' = K \cup \{(u,i,v)\}$, $stav'(u) \in \delta(stav(u),(a,i))$, $stav'(v) \in \delta(q_{0}, (a,i))$ a $stav'(w) = stav(w)$
+		pre všetky $w \in P'$ rôzne od $u$ a $v$.
+	\end{subtasklist}
+
+	Povieme, že konfigurácia $(S_{0},\sigma_{0})$ je dosiahnuteľný koncový stav, pokiaľ existuje sekvencia výpočetných krokov
+	$(S_{0},stav_{0}) \to (S_{1}, stav_{1}) \to ... \to (S_{n}, stav_{n})$ taká, že $stav_{n}(v) \in F$ pre nejaký proces $v$ siete $S_{n}$.
+	
+	Dokážte, že problém dosiahnuteľnosti koncového stavu z danej konfigurácie rendez-vous siete je nerozhodnuteľný. Postupujte redukciou z problému
+	náležitosti slova do jazyka Turingového stroja. Redukcia bude založená na simulácií Turingovho stroja rendez-vous sietí. Budete potrebovať kódovať
+	konfiguráciu Turingovho stroja (obsah pásky, pozícia hlavy, riadiaci stav) konfiguráciou siete, a simulovať krok výpočtu Turingovho stroja výpočetným
+	krokom siete.}
+
+	\begin{mysolution}
+
+		TODO
+	\end{mysolution}
+
+\end{document}
