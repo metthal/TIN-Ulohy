@@ -10,6 +10,8 @@
 \usepackage{tikz-qtree}
 \usepackage{caption}
 \usepackage{background}
+\usepackage{float}
+\restylefloat{table}
 
 \usetikzlibrary{arrows,automata,calc,positioning}
 
@@ -112,7 +114,46 @@ prijímajúci beh tohoto TS a deriváciu tohto slova vo vašej gramatike.
 
 \begin{mysolution}
 
-TODO
+	Definujme problém prázdnosti jazyka ako problém \emph{EP}$\ = \{\langle M \rangle \pipesep L(M) = \varnothing\}$.
+	Budeme dokazovať redukciou z komplementu problému zastavenia \emph{co-HP}, ktorý nie je ani čiastočne rozhodnuteľný, čo plynie
+	z vety 6.2.1 a 5.6.3 zo študíjnej opory. Ukážeme, že \emph{co-HP} je možné úplným TS $M_{\sigma}$ redukovať na problém \emph{EP}.
+	Redukcia je definovaná zobrazením $\sigma: \{0,1,\#\}^{*} \to \{0,1\}^{*}$. $M_{\sigma}$, vykonávajúci toto zobrazenie priradí každému
+	svojmu vstupu $x \in \{0,1,\#\}^{*}$ kód TS $\langle M_{x} \rangle$ fungujúceho nasledovne.
+	\begin{enumerate}[label=\arabic*.]
+		\item Pokiaľ $x$ nie je platnou instanciou \emph{co-HP}, teda nie je v tvare $x_{1}\#x_{2}$, tak TS $M_{x}$ automaticky príjme bez ohľadu na jeho vstup.
+		\item Pokiaľ $x$ je platnou instanciou \emph{co-HP}, teda je v tvare $x_{1}\#x_{2}$, kde $x_{1}$ je platným kódom TS a $x_{2}$ platným kódom jeho vstupu,
+			tak TS $M_{x}$ spustí simuláciu TS $x_{1}$ nad vstupom $x_{2}$ pomocou UTS. Pokiaľ $x_{1}$ zastaví na $x_{2}$, tak $M_{x}$ odmietne.
+			Ak beh $x_{1}$ cyklí na $x_{2}$, tak $M_{x}$ príjme.
+	\end{enumerate}
+
+	Ukážeme, že $M_{\sigma}$ je možné skonštruovať ako úplný TS. $M_{\sigma}$ potrebuje v podstate vykonávať nasledujúce veci
+	\begin{itemize}
+		\item Zistiť, či $x$ je platnou instaciou \emph{co-HP}, čo odpovedá zisteniu príslušnosti v regulárnom jazyku.
+		\item Zostrojiť $M_{x}$, ktorý automaticky príjme, čo odpovedá len prechodu do koncového stavu, alebo $M_{x}$, ktorý
+			zmaže svoju vstupnú pásku, zapíše na ňu $x_{1}\#x_{2}$ a spustí UTS, aby odsimuloval beh $x_{1}$ nad vstupom $x_{2}$.
+	\end{itemize}
+	Zistenie príslušnosti do regulárneho jazyka je možné pomocou konečného automatu, ktorého simulácia na TS je možná čítaním vstupnej pásky
+	a stálym posunom doprava. Zostrojiť $M_{x}$ je možné tak, že najskôr sa zostrojí časť kódu TS $M_{x}$, ktorá zmaže svoju vstupnú pásku a zapíše
+	na ňu $x_{1}\#x_{2}$. Potom sa vloží časť predstavujúca UTS a to sa prepojí časťou, ktorá spustí simuláciu UTS po zapísaní $x_{1}\#x_{2}$.
+	
+	O $L(M_{x})$ vieme, že
+	\begin{enumerate}[label=\arabic*.]
+		\item $L(M_{x}) = \varnothing \Leftrightarrow x$ nie je v tvare $x_{1}\#x_{2}$ alebo je v tvare $x_{1}\#x_{2}$, ale beh $x_{1}$ na $x_{2}$ nikdy neskončí.
+		\item $L(M_{x}) = \{0,1\}^{*} \Leftrightarrow x$ je v tvare $x_{1}\#x_{2}$ ale beh TS $x_{1}$ zastaví na $x_{2}$.
+	\end{enumerate}
+	Môžeme teda zapísať, že $\sigma$ zachováva príslušnosť do jazyka nasledovne.
+	\begin{align*}
+		\langle M_{x} \rangle &\in \emph{EP} \\
+		&\Leftrightarrow \\
+		L(M_{x}) &= \varnothing \\
+		&\Leftrightarrow \\
+		x\text{ nie je v tvare }x_{1}\#x_{2}\text{ alebo je v tvare }&x_{1}\#x_{2}\text{ ale beh }x_{1}\text{ na }x_{2}\text{ nikdy nezastaví} \\
+		&\Leftrightarrow \\
+		&x \in \emph{co-HP}
+	\end{align*}
+	Ukázali sme, že $M_{\sigma}$ vieme zkonštruovať ako úplny TS a že $\sigma$ zachováva príslušnosť do \emph{co-HP} a \emph{EP}. Vykonali sme teda platnú
+	redukciu. Podľa vety 6.3.1 zo študíjnej opory ale plynie, že pokiaľ nie je jazyk \emph{co-HP} rekurzívne vyčísliteľný, tak ani jazyk \emph{EP} nie je jazyk
+	rekurzívne vyčísliteľný. Takže jazyk \emph{EP} nie je rekurzívne vyčísliteľný a tým pádom nie je ani čiastočne rozhodnuteľný.
 \end{mysolution}
 
 \task{3}{Pre danú množinu slov $P$ povieme, že TS $P$-\emph{rozhoduje} jazyk $L$, pokiaľ pre všetky slová mimo $P$ zastaví,
@@ -120,16 +161,77 @@ TODO
 	ktorý ho $P$-\emph{rozhoduje}. Intuitívne je $P$-rozhodnuteľnosť "jednoduchšou" variantou rozhodnuteľnosti -- TS nemusí vedieť
 	rozhodnúť slová z $P$. Dokážte alebo vyvráťte nasledujúce tvrdenia:
 	\begin{subtasklist}
-		\subtask Existuje konečná množina $P$ kódov Turingových strojov, pre ktorú je \emph{HP} $P$-rozhodnuteľný.
-		\subtask Existuje nekonečná množina $P$ Turingových strojov, pre ktorú je \emph{HP} $P$-rozhodnuteľný.
-		\subtask Pre všetky nekonečné množiny $P$ Turingových strojov je \emph{HP} $P$-rozhodnuteľný.
+		\subtask Existuje konečná množina $P$, pre ktorú je \emph{HP} $P$-rozhodnuteľný.
+		\subtask Existuje nekonečná množina $P$, pre ktorú je \emph{HP} $P$-rozhodnuteľný.
+		\subtask Pre všetky nekonečné množiny $P$ je \emph{HP} $P$-rozhodnuteľný.
 	\end{subtasklist}
 V bode (c) skúste vybrať vhodnú nekonečnú množinu $P$ a modifikovať pre ňu prednášaný dôkaz nerozhodnuteľnosti \emph{HP} diagonalizáciou.}
 
 	\begin{mysolution}{subtasks}
-	\subtask TODO
-	\subtask TODO
-	\subtask TODO
+	\subtask Nakoľko má pri $P$-rozhodnuteľnosti existovať TS, ktorý zastaví pre
+	všetky vstupy $x \not\in P$ a prijme vtedy ak $x \not\in P \land x \in\ $\emph{HP}, tak sa pokúsime zvoliť $P$ také, aby zahrňovalo všetky $x$, ktoré
+	majú platný tvar kódovania TS a jeho vstupu -- $\langle M \rangle \# \langle w \rangle$ a zároveň TS $M$ cyklí nad vstupom $w$. To nám
+	zaručí existenciu TS $N$, ktorý buďto rozpozná neplatný tvar kódovania TS a jeho vstupu, alebo príslušnosť slova do $P$ a vtedy abnormálne zastaví.
+	Inak spustí simuláciu TS $M$ nad vstupom $w$, ktorá vždy zastaví a tým pádom vždy príjme. To však je spor s tým, že \emph{HP} je problém nerozhodnuteľný.
+	Pokiaľ by totiž existovala taká konečná
+	množina $P$, že by obsahovala všetky reťazce $\langle M \rangle \# \langle w \rangle$ také, že TS $M$ cyklí nad vstupom $w$, tak by bol problém
+	\emph{HP} rozhodnuteľný, pretože by bolo možné príslušnosťou $\langle M \rangle \# \langle w \rangle$ do regulárneho jazyka $P$ zistiť, kedy má
+	úply TS rozhodujúci \emph{HP} zastaviť. Neexistuje teda konečná množina $P$, pre ktorú je problém \emph{HP} $P$-rozhodnuteľný.
+	\subtask Vyberme jednu instanciu problému \emph{HP} $\langle M_{1} \rangle \# \langle w_{1} \rangle$ takú, že TS $M_{1}$ zastaví nad vstupom $w_{1}$.
+	Zvoľme $P = \{0,1,\#\}^{*} \setminus \{\langle M_{1} \rangle \# \langle w_{1} \rangle\}$. Tým pádom postačí, že TS $N$ $P$-rozhodujúci \emph{HP}
+	bude fungovať tak, že si overí, či má na vstupe práve $\langle M_{1} \rangle \# \langle w_{1} \rangle$,  čo odpovedá zisteniu príslušnosti do regulárneho jazyka.
+	Ak jeho vstup odpovedá $\langle M_{1} \rangle \# \langle w_{1} \rangle$, tak zastaví a príjme a ak nie, tak môže abnormálne zastaviť, ale môže aj cykliť. Existuje teda
+	nekonečná množina $P$, pre ktorú je \emph{HP} $P$-rozhodnuteľný.
+	\subtask Zvoľme $P = \{x \in \{0,1,\#\}^{*} \pipesep \forall x_{1},x_{2} \in \{0,1\}^{*}: x \not= x_{1}\#x_{2}\}$. V $P$ sa teda nachádzajú všetky
+	reťazce také, ktorých tvar neodpovedá kódu TS a kódu vstupu oddelených $\#$. Tým pádom vieme, že všetky reťazce v tvare $x_{1}\#x_{2}$ sú mimo $P$.
+	Pokiaľ má byť \emph{HP} $P$-rozhodnuteľný pre každú nekonečnú množinu $P$, tak musí byť aj pre nami definovanú. Dôkaz povedieme diagonalizáciou
+	založenou na dôkaze nerozhodnuteľnosti \emph{HP} diagonalizáciou v študijnej opore na strane 126.
+	\begin{itemize}
+		\item Pre $x \in \{0,1\}^{*}$, nech $M_{x}$ je TS s kódom $x$. Pokiaľ $x$ nie je platný kód TS, tak $M_{x}$ je TS, ktorý len abnormálne zastaví.
+		\item Zostavíme postupnosť $M_{\varepsilon}, M_{0}, M_{1}, M_{00}, ...$, ktorá zahrňuje všetky TS nad $\{0,1\}$.
+		\item Uvažujeme nekonečnú maticu
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{llllll}
+										& $\varepsilon$                    & $0$                    & $1$                    & $00$                    & ... \\
+					$M_{\varepsilon}$   & $h(M_{\varepsilon},\varepsilon)$ & $h(M_{\varepsilon},0)$ & $h(M_{\varepsilon},1)$ & $h(M_{\varepsilon},00)$ & \ \\
+					$M_{0}$			    & $h(M_{0},\varepsilon)$           & $h(M_{0},0)$           & $h(M_{0},1)$           & $h(M_{0},00)$           & \ \\
+					$M_{1}$			    & $h(M_{1},\varepsilon)$           & $h(M_{1},0)$           & $h(M_{1},1)$           & $h(M_{1},00)$           & \ \\
+					$M_{00}$			& $h(M_{00},\varepsilon)$          & $h(M_{00},0)$          & $h(M_{00},1)$          & $h(M_{00},00)$          & \ \\
+					...                 &                                  &                        &                        &                         & \ 
+				\end{tabular}
+			\end{table}
+		kde pre $h$ platí
+		\begin{equation*}
+			h(M_{x}, x) = \begin{cases}
+				\textbf{Z} & M_{x}\text{ zastaví na }x \\
+				\textbf{C} & M_{x}\text{ cyklí na }x \\
+			\end{cases}
+		\end{equation*}
+		\item Predpokladajme, že existuje TS $K$, ktorý $P$-rozhoduje \emph{HP}. Teda inak povedané, zastaví pre každé
+			$\langle M_{x} \rangle \# \langle x \rangle \not\in P$. Chovanie $K$ je definované nasledovne.
+			\begin{enumerate}[label=\arabic*.]
+				\item Príjme, pokiaľ $M_{x}$ zastaví na $x$ a $\langle M_{x} \rangle \# \langle x \rangle \not\in P$
+				\item Odmietne, pokiaľ $M_{x}$ cyklí na $x$ a $\langle M_{x} \rangle \# \langle x \rangle \not\in P$
+				\item Cyklí, pokiaľ $\langle M_{x} \rangle \# \langle x \rangle \in P$
+			\end{enumerate}
+			Vieme, že iný prípad číslo 3 aktuálne nastať nemôže, lebo $P$ obsahuje výhradne reťazce, ktoré nemajú správny tvar vstupu. Nebudeme ho teda ďalej uvažovať.
+		\item Zostrojíme TS $N$, ktorý pre svoj vstup $x \in \{0,1\}^{*}$
+			\begin{itemize}
+				\item Zostrojí $M_{x}$ z $x$ a zapíše $\langle M_{x} \rangle\#x$ na svoju pásku
+				\item Simuluje $K$ na svojej páske a pokiaľ $K$ odmietne, tak
+					$N$ zastaví a ak $K$ príjme, tak $N$ začne cykliť.
+			\end{itemize}
+		\item Dostávame, že
+			\begin{equation*}
+				N\text{ zastaví na }x \Leftrightarrow K\text{ odmietne }\langle M_{x} \rangle \# \langle x \rangle \Leftrightarrow M_{x}\text{ cyklí na }x
+			\end{equation*}
+			Vieme s určitosťou povedať, že $\langle N \rangle \# \langle x \rangle \not\in P$. Taktiež vieme, že $N$ je rozdielny od každého $M_{x}$ minimálne
+			v jednom vstupe a to práve $x$. Potom ale postupnosť $M_{\varepsilon}, M_{0}, M_{1}, M_{00}, ...$ nebola postupnosť všetkých TS nad $\{0,1\}$.
+			Taký TS $K$ teda pre tento konkrétny prípad existovať nemôže.
+	\end{itemize}
+
+	Dokázali sme, že pre špecifické nekonečné $P$ nie je \emph{HP} $P$-rozhodnuteľný. Teda nemôže byť $P$-rozhodnuteľný pre každé nekonečné $P$.
 	\end{mysolution}
 
 \task{4}{Rendez-vous sieť je graf, v ktorého každom uzle beží proces vykonávajúci rovnaký konečne stavový program. Procesy spojené hranou
