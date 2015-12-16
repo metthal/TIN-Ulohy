@@ -91,17 +91,24 @@ prijímajúci beh tohoto TS a deriváciu tohto slova vo vašej gramatike.
 		  &A \to baaA \pipesep \varepsilon &
 	\end{flalign*}
 
-	Za ľubovolné slovo zvolme slovo $abaa$. Beh TS je znázornený konfiguráciou pásky nasledovne.
-
+	Za ľubovolné slovo zvolme slovo $abaa$. Beh TS je znázornený prechodmi medzi konfiguráciami TS nasledovne.
+	
 	\begin{align*}
-		\underline{\Delta} abaa \Delta\Delta^{\omega} && \Delta aba\underline{a} \Delta\Delta^{\omega} && \Delta ab\underline{a}\Delta \Delta\Delta^{\omega}
-		&&	\Delta \underline{a}\Delta\Delta\Delta \Delta\Delta^{\omega} && \Delta \underline{Y}\Delta\Delta\Delta \Delta\Delta^{\omega}\\
-		\Delta \underline{a}baa \Delta\Delta^{\omega} && \Delta abaa \underline{\Delta}\Delta^{\omega} && \Delta ab\underline{\Delta}\Delta \Delta\Delta^{\omega}
-		&&	\Delta \underline{\Delta}\Delta\Delta\Delta \Delta\Delta^{\omega} && \underline{\Delta} Y\Delta\Delta\Delta \Delta\Delta^{\omega}\\
-		\Delta a\underline{b}aa \Delta\Delta^{\omega} && \Delta aba\underline{a} \Delta\Delta^{\omega} && \Delta a\underline{b}\Delta\Delta \Delta\Delta^{\omega}
-		&&	\underline{\Delta} \Delta\Delta\Delta\Delta \Delta\Delta^{\omega}\\
-		\Delta ab\underline{a}a \Delta\Delta^{\omega} && \Delta aba\underline{\Delta} \Delta\Delta^{\omega} && \Delta a\underline{\Delta}\Delta\Delta \Delta\Delta^{\omega} 
-		&&	\Delta \underline{\Delta}\Delta\Delta\Delta \Delta\Delta^{\omega}
+	&(0,\Delta abaa \Delta\Delta^{\omega},0) \vdash (1,\Delta abaa \Delta\Delta^{\omega},1)
+		\vdash (2,\Delta abaa \Delta\Delta^{\omega},2) \vdash \\
+	&(3,\Delta abaa \Delta\Delta^{\omega},3) \vdash (1,\Delta abaa \Delta\Delta^{\omega},4)
+		\vdash (2,\Delta abaa \Delta\Delta^{\omega},5) \vdash \\
+	&(5,\Delta abaa \Delta\Delta^{\omega},4) \vdash (6,\Delta aba\Delta \Delta\Delta^{\omega},4)
+		\vdash (5,\Delta aba\Delta \Delta\Delta^{\omega},3) \vdash \\
+	&(6,\Delta ab\Delta\Delta \Delta\Delta^{\omega},3) \vdash
+	 (5,\Delta ab\Delta\Delta \Delta\Delta^{\omega},2) \vdash
+	 (6,\Delta a\Delta\Delta\Delta \Delta\Delta^{\omega},2) \vdash \\
+	&(5,\Delta a\Delta\Delta\Delta \Delta\Delta^{\omega},1) \vdash
+	 (6,\Delta \Delta\Delta\Delta\Delta \Delta\Delta^{\omega}, 1) \vdash
+	 (5,\Delta \Delta\Delta\Delta\Delta \Delta\Delta^{\omega}, 0) \vdash \\
+	&(7,\Delta \Delta\Delta\Delta\Delta \Delta\Delta^{\omega}, 1) \vdash
+	 (8,\Delta Y\Delta\Delta\Delta \Delta\Delta^{\omega}, 1) \vdash
+	 (9,\Delta Y\Delta\Delta\Delta \Delta\Delta^{\omega}, 0)
 	\end{align*}
 
 	Derivácia slova $abaa$ v gramatike $G$ je nasledovná.
@@ -122,8 +129,8 @@ prijímajúci beh tohoto TS a deriváciu tohto slova vo vašej gramatike.
 	\begin{enumerate}[label=\arabic*.]
 		\item Pokiaľ $x$ nie je platnou instanciou \emph{co-HP}, teda nie je v tvare $x_{1}\#x_{2}$, tak TS $M_{x}$ automaticky príjme bez ohľadu na jeho vstup.
 		\item Pokiaľ $x$ je platnou instanciou \emph{co-HP}, teda je v tvare $x_{1}\#x_{2}$, kde $x_{1}$ je platným kódom TS a $x_{2}$ platným kódom jeho vstupu,
-			tak TS $M_{x}$ spustí simuláciu TS $x_{1}$ nad vstupom $x_{2}$ pomocou UTS. Pokiaľ $x_{1}$ zastaví na $x_{2}$, tak $M_{x}$ odmietne.
-			Ak beh $x_{1}$ cyklí na $x_{2}$, tak $M_{x}$ príjme.
+			tak TS $M_{x}$ spustí simuláciu TS $x_{1}$ nad vstupom $x_{2}$ pomocou UTS. Pokiaľ $x_{1}$ zastaví na $x_{2}$, tak $M_{x}$ príjme.
+			Ak beh $x_{1}$ cyklí na $x_{2}$, tak $M_{x}$ odmietne.
 	\end{enumerate}
 
 	Ukážeme, že $M_{\sigma}$ je možné skonštruovať ako úplný TS. $M_{\sigma}$ potrebuje v podstate vykonávať nasledujúce veci
@@ -138,8 +145,8 @@ prijímajúci beh tohoto TS a deriváciu tohto slova vo vašej gramatike.
 	
 	O $L(M_{x})$ vieme, že
 	\begin{enumerate}[label=\arabic*.]
-		\item $L(M_{x}) = \varnothing \Leftrightarrow x$ nie je v tvare $x_{1}\#x_{2}$ alebo je v tvare $x_{1}\#x_{2}$, ale beh $x_{1}$ na $x_{2}$ nikdy neskončí.
-		\item $L(M_{x}) = \{0,1\}^{*} \Leftrightarrow x$ je v tvare $x_{1}\#x_{2}$ ale beh TS $x_{1}$ zastaví na $x_{2}$.
+		\item $L(M_{x}) = \varnothing \Leftrightarrow x$ je v tvare $x_{1}\#x_{2}$, ale beh $x_{1}$ na $x_{2}$ nikdy neskončí.
+		\item $L(M_{x}) = \{0,1\}^{*} \Leftrightarrow x$ nie je v tvare $x_{1}\#x_{2}$, alebo je v tvare $x_{1}\#x_{2}$, ale beh TS $x_{1}$ zastaví na $x_{2}$.
 	\end{enumerate}
 	Môžeme teda zapísať, že $\sigma$ zachováva príslušnosť do jazyka nasledovne.
 	\begin{align*}
@@ -147,7 +154,7 @@ prijímajúci beh tohoto TS a deriváciu tohto slova vo vašej gramatike.
 		&\Leftrightarrow \\
 		L(M_{x}) &= \varnothing \\
 		&\Leftrightarrow \\
-		x\text{ nie je v tvare }x_{1}\#x_{2}\text{ alebo je v tvare }&x_{1}\#x_{2}\text{ ale beh }x_{1}\text{ na }x_{2}\text{ nikdy nezastaví} \\
+		x\text{ je v tvare }x_{1}\#x_{2}\text{ ale beh }&x_{1}\text{ na }x_{2}\text{ nikdy nezastaví} \\
 		&\Leftrightarrow \\
 		&x \in \emph{co-HP}
 	\end{align*}
