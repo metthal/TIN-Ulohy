@@ -179,7 +179,7 @@ V bode (c) skúste vybrať vhodnú nekonečnú množinu $P$ a modifikovať pre �
 	všetky vstupy $x \not\in P$ a prijme vtedy ak $x \not\in P \land x \in\ $\emph{HP}, tak sa pokúsime zvoliť $P$ také, aby zahrňovalo všetky $x$, ktoré
 	majú platný tvar kódovania TS a jeho vstupu -- $\langle M \rangle \# \langle w \rangle$ a zároveň TS $M$ cyklí nad vstupom $w$. To nám
 	zaručí existenciu TS $N$, ktorý buďto rozpozná neplatný tvar kódovania TS a jeho vstupu, alebo príslušnosť slova do $P$ a vtedy abnormálne zastaví.
-	Inak spustí simuláciu TS $M$ nad vstupom $w$, ktorá vždy zastaví a tým pádom vždy príjme. To však je spor s tým, že \emph{HP} je problém nerozhodnuteľný.
+	Inak spustí simuláciu TS $M$ nad vstupom $w$, ktorá vždy zastaví a vtedy príjme. To však je spor s tým, že \emph{HP} je problém nerozhodnuteľný.
 	Pokiaľ by totiž existovala taká konečná
 	množina $P$, že by obsahovala všetky reťazce $\langle M \rangle \# \langle w \rangle$ také, že TS $M$ cyklí nad vstupom $w$, tak by bol problém
 	\emph{HP} rozhodnuteľný, pretože by bolo možné príslušnosťou $\langle M \rangle \# \langle w \rangle$ do regulárneho jazyka $P$ zistiť, kedy má
@@ -284,7 +284,7 @@ V bode (c) skúste vybrať vhodnú nekonečnú množinu $P$ a modifikovať pre �
 																	   & \exists p \in P_{n}: stav_{n}(p) \in F\}
 		\end{align*}
 		Ako $\langle (S_{0}, stav_{0}) \rangle$ sa myslí kód konfigurácie rendez-vous siete, ktorý vznikne postupným zobrazovaním jej zložiek na množinu $\{0,1\}$.
-		Vy výsledku by kód konfigurácie siete $(S = (A,P,K), stav)$ mohol vyzerať ako $\# \langle A \rangle \# \langle P \rangle \# \langle K \rangle \# \langle stav \rangle \#$,
+		Vo výsledku by kód konfigurácie siete $(S = (A,P,K), stav)$ mohol vyzerať ako $\# \langle A \rangle \# \langle P \rangle \# \langle K \rangle \# \langle stav \rangle \#$,
 		kde $\langle A \rangle$ je kód automatu $A$, ktorý vznikne obdobne ako kód TS podľa podkapitoly 6.2.1 v študíjnej opore, kde sa vynechá časť o kódovaní
 		akcie $y \in \Gamma \cup \{L,R\}$, ktorú automat nemá. Kódom $\langle P \rangle$ sa rozumie ľubovoľne zakódovaná množina procesov, tak aby bolo možné
 		jednoznačne rozlíšiť procesy, ktoré sa v sieti nachádzajú. Kód $\langle K \rangle$ je kódom komunikačných kanálov z ktorého musí byť možné jednoznačne určiť,
@@ -295,28 +295,33 @@ V bode (c) skúste vybrať vhodnú nekonečnú množinu $P$ a modifikovať pre �
 		zobrazenie $\sigma: \{0,1,\#\}^{*} \to \{0,1,\#\}^{*}$, pričom platí $\forall x \in \{0,1,\#\}^{*}: x \in \text{\emph{MP}} \Leftrightarrow \sigma(x) \in \text{\emph{RNP}}$.
 		Zostrojíme teda úplný TS $M_{\sigma}$, ktorý bude vykonávať zobrazenie $\sigma$ nad svojim vstupom. Základna idea redukcie je vyfiltrovať najskôr vstupy tvaru
 		$x_{1}\#x_{2}$, kde $x_{1} \in \{0,1\}^{*}$ je platným kódom TS a $x_{2} \in \{0,1\}^{*}$ platným kódom jeho vstupu. Následne vytvoriť toľko procesov, aká je
-		dĺžka vstupu $x_{2}$. Stavy týchto procesov budú odpovedať páskovej abecede TS $x_{1}$. Počiatočným stavom bude stav $\Delta$.
-		Proces $p_{i}$ bude mať stav určený symbolom $a_{i}$ zo vstupného reťazca $x_{2}$.
+		dĺžka vstupu $x_{2}$ + 1. Jeden nadbytočný proces sa použije ako zarážka na ľavej
+		strane simulovanej pásky TS. Jednotlivé procesy budú tým pádom simulovať bunky na páske
+		TS. Stavy procesov budú odpovedať páskovej abecede TS
+		s kódom $x_{1}$. Počiatočným stavom bude stav $\Delta$.
+		Proces $p_{i}$ bude mať stav určený symbolom $a_{i}$, ktorý je na pozícií $i$ vo vstupnom reťazci kódovanom $x_{2}$.
 		Pre prípad simulácie pozície hlavy a stavu TS avšak zavedieme ešte ďaľšie možné stavy automatu $A$, ktoré budú odpovedať dvojiciam $(q,a)$, kde $q$ je stav TS $x_{1}$
-		a $a$ je symbol páskovej abecedy TS $x_{1}$. Proces $p_{i}$ v takomto stave $(q,a)$ značí, že simulovaný TS $x_{1}$ v sieti má hlavu na pozícií $i$ a stav tohto
+		a $a$ je symbol páskovej abecedy TS kódovaného $x_{1}$. Proces $p_{i}$ v takomto stave $(q,a)$ značí, že simulovaný TS kódovaného $x_{1}$ v sieti má hlavu na pozícií $i$ a stav tohto
 		TS je $q$. Množina koncových stavov je daná stavmi $(q_{F}^{x_{1}}, a)$ pre ľubovolné $a$, pričom $q_{F}^{x_{1}}$ odpovedá koncovému stavu TS $x_{1}$.
 		Komunikačné kanály sú definované medzi susednými procesmi, čo odpovedá znakom vo vstupe $x_{2}$, ktoré idú bezprostredne za sebou. Proces $p_{i}$
-		je spojený kanálom 1 s procesom $p_{i-1}$ (výnimkou je $p_{1}$) a kanálom 2 s procesom $p_{i+1}$ (výnimkou je proces $p_{|x_{2}|}$). Každý proces je zároveň
-		spojený sám so sebou kanálom 1. Výpočetný krok siete simuluje výpočetný krok TS $x_{1}$ tak, že komunikujúcim procesom je vždy proces v stave
+		je spojený kanálom 1 s procesom $p_{i+1}$ (pokiaľ existuje) a proces $p_{i+1}$
+		je spojený kanálom 2 s procesom $p_{i+2}$ (pokiaľ existuje). Každý proces je teda
+		spojený s jedným procesom kanálom 1 a s druhým procesom kanálom 2. Výnimkou je len posledný
+		proces a proces $p_{-1}$ predstavujúci ľavú zarážku pásky. Proces $p_{-1}$ je spojený
+		oboma kanálmi so samým sebou. Výpočetný krok siete simuluje výpočetný krok TS $x_{1}$ tak, že komunikujúcim procesom je vždy proces v stave
 		simulujúcom pozíciu hlavy a stav TS, teda v stave $(q,a)$. Komunikujúcou správou je $a$, kanál a aj proces, s ktorým bude komunikácia prebiehať je vybraný nedeterministicky.
 		Nedeterminizmus postačuje, pretože je požadovaná existencia sekvencie výpočetných krokov.
 
 		Presný a formálny popis fungovania $M_{\sigma}$ je potom nasledovný.
 		\begin{itemize}
-			\item $M_{\sigma}$ má v sebe zapísaný konštantný úplný TS $M_{RN}$, ktorý je na jeho výstupe vždy pre ľubovoľný vstup $x \in \{0,1,\#\}^{*}$.
+			\item $M_{\sigma}$ má v sebe zapísaný konštantný TS $M_{RN}$, ktorý na jeho výstupe vždy pre ľubovoľný vstup $x \in \{0,1,\#\}^{*}$.
 				Jedná sa o stroj, ktorý dokáže simulovať rendez-vous sieť na vstupe $\langle (S, stav) \rangle$ a to nasledovne.
 				\begin{itemize}
 					\item Pokiaľ je na vstupe $M_{RN}$ neplatný kód konfigurácie siete, tak stroj odmietne.
 					\item Stroj vyberie proces $p \in P$, pre ktorý platí, že $stav(p) = (q,a)$, nedeterministicky zvolí
 						kanál 1 alebo 2 a proces s ktorým bude komunikovať. Následne prebehne komunikácia so správou $a$
 						medzi timito procesmi, ako je definované v zadaní. Stroj vykonáva túto činnosť opakovane, pokiaľ
-						nebude platiť, že $\exists p \in P: stav(p) \in F$. Potom príjme. Pokiaľ sa nikdy do koncovej konfigurácie nedostane,
-						tak odmietne.
+						nebude platiť, že $\exists p \in P: stav(p) \in F$. Potom príjme.
 				\end{itemize}
 			\item $M_{\sigma}$ má na vstupe $x \in \{0,1,\#\}^{*}$. Pokiaľ $x$ nie je v tvare $x_{1}\#x_{2}$, kde $x_{1},x_{2} \in \{0,1\}^{*}$,
 				či je v tvare $x_{1}\#x_{2}$, ale $x_{1}$ nie je platným kódom TS alebo $x_{2}$ nie je platným kódom jeho vstupu,
@@ -329,34 +334,41 @@ V bode (c) skúste vybrať vhodnú nekonečnú množinu $P$ a modifikovať pre �
 						$x_{2}$ je kód jeho vstupu $w$ (teda $x_{1}\#x_{2} = \langle M \rangle \# \langle w \rangle)$.
 					\item Automat $A = (Q, \Sigma \times \{1,2\}, \delta, q_{0}, F)$ sa zostrojí nasledovne
 						\begin{itemize}
-							\item $Q = \Gamma_{M} \cup (Q_{M} \times \Gamma_{M})$ pokiaľ $\Gamma_{M} \cap Q_{M} = \varnothing$, teda sú disjunktné.
-								Pokiaľ nie, zvolíme premenovanie stavov $Q_{M}$ tak aby $\Gamma_{M}$ a $Q_{M}$ boli disjunktné.
+							\item $Q = \Gamma_{M} \cup (Q_{M} \times \Gamma_{M}) \cup \{\#_{L}\}$ pokiaľ $\Gamma_{M} \cap Q_{M} = \varnothing$, teda sú disjunktné.
+								Pokiaľ nie, zvolíme premenovanie stavov $Q_{M}$ tak aby $\Gamma_{M}$ a $Q_{M}$ boli disjunktné. Značenie $\#_{L}$ musí byť taktiež unikátne.
 							\item $\Sigma = \Gamma_{M}$
 							\item $\delta$ sa zostrojí postupne podľa algoritmu:
 								\begin{itemize}
-									\item Pokiaľ pre nejaké $q,p \in Q_{M}$ a $a \in \Gamma_{M}$ platí, že $(p,R) \in \delta_{M}(q,a)$, tak
-										do $\delta((q,a),(a,2))$ pridaj $a$ a pre každé $b \in \Gamma_{M}$ do $\delta(b,(a,2))$ pridaj $(p,b)$.
-									\item Pokiaľ pre nejaké $q,p \in Q_{M}$ a $a \in \Gamma_{M}$ platí, že $(p,L) \in \delta_{M}(q,a)$, tak
-										do $\delta((q,a),(a,1))$ pridaj $a$ a pre každé $b \in \Gamma_{M}$ do $\delta(b,(a,1))$ pridaj $(p,b)$.
+									\item Pokiaľ pre nejaké $q,p \in Q_{M}$ a $a \in \Gamma_{M}$ a $b \in \{L,R\}$ platí, že $(p,b) \in \delta_{M}(q,a)$, tak
+										do $\delta((q,a),(a,1))$ pridaj $a$,
+										do $\delta((q,a),(a,2))$ pridaj $a$
+										a pre každé $c \in \Gamma_{M}$ do
+										$\delta(c,(a,1))$ pridaj $(p,c)$
+										a do $\delta(c,(a,2))$ pridaj $(p,c)$.
 									\item Pokiaľ pre nejaké $q,p \in Q_{M}$ a $a,b \in \Gamma_{M}$ platí, že $(p,b) \in \delta_{M}(q,a)$, tak
-										do $\delta((q,a),(a,1))$ pridaj $(p,b)$.
+										do $\delta((q,a),(a,1))$ pridaj $(p,b)$
+										a do $\delta((q,a),(a,1))$ pridaj $(p,b)$.
 								\end{itemize}
 							\item $q_{0} = \Delta$
 							\item $F = \{(q,a) \in (Q_{M} \times \Gamma_{M}) \pipesep q = q_{F}^{M}\}$
 						\end{itemize}
 					\item Množinu procesov $P$ zostrojíme tak, že zapíšeme $w = a_{1}...a_{n}$, kde $a_{i} \in \Sigma_{M}$ pre $1 \le i \le n$.
-						Pre každý symbol $a_{i}$ vytvoríme proces $p_{i}$ a umiestnime do množiny $P$. Pokiaľ $w = \varepsilon$, tak $P = \varnothing$.
-					\item Množinu kanálov $K$ zostrojíme tak, že zapíšeme $w = a_{1}...a_{n}$, kde $a_{i} \in \Sigma_{M}$ pre $1 \le i \le n$.
-						Pre každú dvojicu $a_{i}$ a $a_{i+1}$ pre $1 \le i < n$ pridaj do $K$ kanály
-						$(p_{i}, 1, p_{i}), (p_{i}, 2, p_{i+1}), (p_{i+1}, 1, p_{i})$ a $(p_{i+1}, 1, p_{i+1})$.
-					\item Zobrazenie $stav$ zostrojíme tak, že každému procesu $p_{i} \in P$, priradíme stav podľa hodnoty symbolu $a_{i}$ na vstupe $w$.
-						Procesu $p_{1}$ ako jedinému priradíme stav $(q_{0}, a_{1})$, čo značí pozíciu hlavy a stav TS $M$.
+						Pre každý symbol $a_{i}$ vytvoríme proces $p_{i}$ a umiestnime do množiny $P$. Vytvoríme tiež procesy $p_{0}$ a $p_{|w|}$ v stavoch $\Delta$ a $p_{-1}$ v stave $\#_{L}$.
+					\item Množinu kanálov $K$ zostrojíme tak, že $\forall i \ge 0$
+					zoberieme procesy $p_{3i}$ a $p_{3i+1}$ a do $K$ pridáme $(p_{3i},1,p_{3i+1})$,
+					a zoberiem procesy $p_{3i+1}$ a $p_{3i+2}$ a do $K$ pridáme
+					$(p_{3i+1},1,p_{3i+2})$. Pre proces $p_{-1}$ pridáme do $K$ $(p_{-1},2,p_{0})$,
+					$(p_{-1},1,p_{-1})$ a $(p_{-1},1,p_{-1})$.
+			\item Zobrazenie $stav$ zostrojíme tak, že každému procesu $p_{i} \in P,
+			1 \le i \le |w|$,
+			priradíme stav podľa hodnoty symbolu $a_{i}$ na vstupe $w$.
+						Procesu $p_{0}$ ako priradíme stav $(q_{0}, \Delta)$, čo značí pozíciu hlavy a stav TS $M$. Proces $p_{-1}$ bude mať pridelený stav $\#_{L}$.
 				\end{itemize}
 			\item $M_{\sigma}$ taktiež zostrojí kód TS $\langle M_{x} \rangle$ = $\langle M_{x_{1}\#x_{2}} \rangle$. Tento TS bude mať na vstupe
 				kód konfigurácie siete $\langle (S,stav) \rangle$, ktorý vznikol v $M_{\sigma}$. $M_{x}$ bude pozostávať z 2 častí
 				\begin{itemize}
-					\item Kontrola prítomnosti počiatočného stavu TS daného kódom $x_{1}$ (kód tohto stavu je konštantne zapisaný v $M_{x}$) v stave procesu
-						$p_{1}$, čo odpovedá kontrole počiatočnej konfigurácie pásky a simulovaného TS daného kódom $x_{1}$. Pokiaľ vstup neprejde kontrolou,
+					\item Kontrola prítomnosti počiatočného stavu TS daného kódom $x_{1}$ (kód tohto stavu je konštantne zapisaný v $M_{x}$) výhradne v stave procesu
+						$p_{0}$, čo odpovedá kontrole počiatočnej konfigurácie pásky a simulovaného TS daného kódom $x_{1}$. Pokiaľ vstup neprejde kontrolou,
 						tak $M_{x}$ odmietne.
 					\item Stroja $M_{RN}$, ktorý je spustený pokiaľ vstupný kód konfigurácie siete prejde úvodnou kontrolou. Pokiaľ simulácia $M_{RN}$
 						na $\langle (S,stav) \rangle$ skončí a $M_{RN}$ príjme, tak $M_{x}$ taktiež príjme. Pokiaľ simulácia $M_{RN}$ skončí, ale $M_{RN}$
@@ -364,17 +376,23 @@ V bode (c) skúste vybrať vhodnú nekonečnú množinu $P$ a modifikovať pre �
 				\end{itemize}
 			\item Ukážeme, že TS $M_{\sigma}$ je naozaj úplný a je ho možné zostrojiť. Postačí totiž aby $M_{\sigma}$ zvládal nasledujúce činnosti.
 				\begin{itemize}
-					\item Rozoznať, či je jeho vstup $x \in \{0,1,\#\}^{*}$ v tvare $x_{1}\#x_{2}$, $x_{1},x_{2} \in {0,1}*$, čo odpovedá zisteniu príslušnosti
+					\item Rozoznať, či je jeho vstup $x \in \{0,1,\#\}^{*}$ v tvare $x_{1}\#x_{2}$, $x_{1},x_{2} \in \{0,1\}^{*}$, čo odpovedá zisteniu príslušnosti
 						do regulárneho jazyka.
 					\item Zakódovanie konfigurácie siete z kódu TS $x_{1}$ na vstupe. Spojenie $\Gamma_{M}$ a $Q_{M}$ je možné vyriešiť napríklad prekódovaním
-						stavov z $Q_{M}$ konkatenáciou s najdlhším kódovaním symbolu z $\Gamma_{M}$, čo je jednoducho algoritmizovateľná úloha. Zostavenie $\gamma$
-						je opäť zisťovanie príslušnosti do regulárneho jazyka. Zakódovanie procesov a kanálov je len priraďovanie nových kódov, čo je jednoducho algoritmizovateľné.
-					\item Zostrojenie $M_{x}$, ktorý buďto vždy abnormálne zastaví, alebo $M_{x}$, ktorý zistí či proces $stav(p_{1})$ odpovedá dvojici $(q,a)$ pre
-						ľubovoľné $a$ a pre $q = q_{0}^{M}$ a následné spustenie simulácie $M_{RN}$ na vstupe $\langle (S,stav) \rangle$.
+						stavov z $Q_{M}$ konkatenáciou s najdlhším kódovaním symbolu z $\Gamma_{M}$, čo je jednoducho algoritmizovateľná úloha. Zakódovanie procesov a kanálov je len priraďovanie nových kódov, čo je jednoducho algoritmizovateľné.
+					\item Zostrojenie $M_{x}$, ktorý buďto vždy abnormálne zastaví, alebo $M_{x}$, ktorý zistí či proces $stav(p_{0})$ odpovedá dvojici $(q_{0}^{M},\Delta)$ a následné spustenie simulácie $M_{RN}$ na vstupe $\langle (S,stav) \rangle$.
 				\end{itemize}
+			\item Vieme, že $M_{RN}$ je schopný prijať aj konfigurácie sietí, ktoré neodpovedajú
+			počia\-toč\-nej konfigurácií zakódovaného TS v kóde $\langle (S, stav) \rangle$, teda
+			proces $p_{0}$ nebude v očakávanom počiatočnom stave $(q_{0}^{M}, \Delta)$.
+			Neodpovedajú zároveň žiadnej dvojici $\langle M \rangle \# \langle w \rangle$, preto\-že
+			tie sa budú výhradne kódovať pomocou $M_{\sigma}$ len na počiatočné konfigurácie.
+			Môžeme preto predpokladať, že $L(M_{x}) \subset L(M_{RN})$. Pokiaľ však ukážeme, že
+			$L(M_{x})$ nie je rozhodnuteľný, tak ani $L(M_{RN})$ a teda ani \emph{RNP} nie je
+			rozhodnuteteľný.
 			\item Dostávame, že platí
 				\begin{align*}
-					\langle (S,stav) \rangle &\in \text{\emph{RNP}}\\
+					\langle (S,stav) \rangle &\in L(M_{x})\\
 					&\Leftrightarrow \\
 					M_{x}\text{ príjme } &\langle (S,stav) \rangle \\
 					&\Leftrightarrow \\
@@ -388,6 +406,12 @@ V bode (c) skúste vybrať vhodnú nekonečnú množinu $P$ a modifikovať pre �
 					&\Leftrightarrow \\
 					x_{1}\#x_{2} &\in \text{\emph{MP}}
 				\end{align*}
+				a nakoľko vieme, že $L(M_{x}) \subset \text{\emph{RNP}}$, tak potom platí, že
+				\begin{align*}
+				\langle (S,stav) \rangle \in L(M_{x}) \Rightarrow \langle (S,stav) \rangle \in
+				\text{\emph{RNP}}
+				\end{align*}
+				a teda problém \emph{RNP} nie je rozhodnuteľný.
 		\end{itemize}
 	\end{mysolution}
 
