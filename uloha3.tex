@@ -40,7 +40,7 @@
 \SetBgColor{black}
 \SetBgPosition{current page.north east}
 \SetBgVshift{-0.8cm}
-\SetBgHshift{-3.5cm}
+\SetBgHshift{-4.5cm}
  
 \begin{document}
  
@@ -311,10 +311,20 @@ V bode (c) skúste vybrať vhodnú nekonečnú množinu $P$ a modifikovať pre �
 		oboma kanálmi so samým sebou. Výpočetný krok siete simuluje výpočetný krok TS $x_{1}$ tak, že komunikujúcim procesom je vždy proces v stave
 		simulujúcom pozíciu hlavy a stav TS, teda v stave $(q,a)$. Komunikujúcou správou je $a$, kanál a aj proces, s ktorým bude komunikácia prebiehať je vybraný nedeterministicky.
 		Nedeterminizmus postačuje, pretože je požadovaná existencia sekvencie výpočetných krokov.
+		
+		Simulácia pohybu hlavy po páske TS je vykonaná tak, že ak je proces $p_{i}$ v stave
+		$(q,a)$, tak pohyb doľava podľa pravidla $(p,L) \in \delta(q,a)$ výberom kanála, ktorý smeruje na proces $p_{i-1}$, ktorý je v stave $b$.
+		Po vykonaní simulovaného výpočetného kroku bude proces $p_{i-1}$ v stave $(p,b)$
+		a proces $p_{i}$ v stave $a$. Komunikovanou správou pritom bude správa $(p,a,L)$. Analogicky to platí pre proces $p_{i+1}$ a pohyb doprava.
+		Zápis na pásku sa udeje tak, že dva susedné procesy sa dohodnú, že proces $p_{i}$
+		podľa pravidla $(p,b) \in \delta(q,a)$ prejde zo stavu $(q,a)$ do $(p,b)$ a niektorý
+		zo susedných procesov $p_{i-1}$ alebo $p_{i+1}$ prejde zo stavu $c$ opäť do stavu $c$.
+		Komunikovanou správou bude správa $(p,a,b)$.
+		Pokiaľ sa posledný proces pokúsi prejsť za pravý okraj pásky, tak to spôsobí vytvorenie nového procesu.
 
 		Presný a formálny popis fungovania $M_{\sigma}$ je potom nasledovný.
 		\begin{itemize}
-			\item $M_{\sigma}$ má v sebe zapísaný konštantný TS $M_{RN}$, ktorý na jeho výstupe vždy pre ľubovoľný vstup $x \in \{0,1,\#\}^{*}$.
+			\item $M_{\sigma}$ má v sebe zapísaný konštantný TS $M_{RN}$.
 				Jedná sa o stroj, ktorý dokáže simulovať rendez-vous sieť na vstupe $\langle (S, stav) \rangle$ a to nasledovne.
 				\begin{itemize}
 					\item Pokiaľ je na vstupe $M_{RN}$ neplatný kód konfigurácie siete, tak stroj odmietne.
@@ -336,18 +346,23 @@ V bode (c) skúste vybrať vhodnú nekonečnú množinu $P$ a modifikovať pre �
 						\begin{itemize}
 							\item $Q = \Gamma_{M} \cup (Q_{M} \times \Gamma_{M}) \cup \{\#_{L}\}$ pokiaľ $\Gamma_{M} \cap Q_{M} = \varnothing$, teda sú disjunktné.
 								Pokiaľ nie, zvolíme premenovanie stavov $Q_{M}$ tak aby $\Gamma_{M}$ a $Q_{M}$ boli disjunktné. Značenie $\#_{L}$ musí byť taktiež unikátne.
-							\item $\Sigma = \Gamma_{M}$
+							\item $\Sigma = Q_{M} \times \Gamma_{M} \times
+								(\Gamma_{M} \cup \{L,R\})$
 							\item $\delta$ sa zostrojí postupne podľa algoritmu:
 								\begin{itemize}
 									\item Pokiaľ pre nejaké $q,p \in Q_{M}$ a $a \in \Gamma_{M}$ a $b \in \{L,R\}$ platí, že $(p,b) \in \delta_{M}(q,a)$, tak
-										do $\delta((q,a),(a,1))$ pridaj $a$,
-										do $\delta((q,a),(a,2))$ pridaj $a$
+										do $\delta((q,a),((p,a,b),1))$ pridaj $a$,
+										do $\delta((q,a),((p,a,b),2))$ pridaj $a$
 										a pre každé $c \in \Gamma_{M}$ do
-										$\delta(c,(a,1))$ pridaj $(p,c)$
-										a do $\delta(c,(a,2))$ pridaj $(p,c)$.
+										$\delta(c,((p,a,b),1))$ pridaj $(p,c)$
+										a do $\delta(c,((p,a,b),2))$ pridaj $(p,c)$. (Simulácia pohybu
+										hlavy doľava alebo doprava)
 									\item Pokiaľ pre nejaké $q,p \in Q_{M}$ a $a,b \in \Gamma_{M}$ platí, že $(p,b) \in \delta_{M}(q,a)$, tak
-										do $\delta((q,a),(a,1))$ pridaj $(p,b)$
-										a do $\delta((q,a),(a,1))$ pridaj $(p,b)$.
+										do $\delta((q,a),((p,a,b),1))$ pridaj $(p,b)$
+										,do $\delta((q,a),((p,a,b),1))$ pridaj $(p,b)$
+										a pre každé $c \in \Gamma_{M}$ do
+										$\delta(c,((p,a,b),1))$ pridaj $c$
+										a do $\delta(c,((p,a,b),2))$ pridaj $c$. (Simulácia zápisu na pásku)
 								\end{itemize}
 							\item $q_{0} = \Delta$
 							\item $F = \{(q,a) \in (Q_{M} \times \Gamma_{M}) \pipesep q = q_{F}^{M}\}$
@@ -364,7 +379,7 @@ V bode (c) skúste vybrať vhodnú nekonečnú množinu $P$ a modifikovať pre �
 			priradíme stav podľa hodnoty symbolu $a_{i}$ na vstupe $w$.
 						Procesu $p_{0}$ ako priradíme stav $(q_{0}, \Delta)$, čo značí pozíciu hlavy a stav TS $M$. Proces $p_{-1}$ bude mať pridelený stav $\#_{L}$.
 				\end{itemize}
-			\item $M_{\sigma}$ taktiež zostrojí kód TS $\langle M_{x} \rangle$ = $\langle M_{x_{1}\#x_{2}} \rangle$. Tento TS bude mať na vstupe
+			\item $M_{\sigma}$ taktiež zostrojí kód úplného TS $\langle M_{x} \rangle$ = $\langle M_{x_{1}\#x_{2}} \rangle$. Tento TS bude mať na vstupe
 				kód konfigurácie siete $\langle (S,stav) \rangle$, ktorý vznikol v $M_{\sigma}$. $M_{x}$ bude pozostávať z 2 častí
 				\begin{itemize}
 					\item Kontrola prítomnosti počiatočného stavu TS daného kódom $x_{1}$ (kód tohto stavu je konštantne zapisaný v $M_{x}$) výhradne v stave procesu
