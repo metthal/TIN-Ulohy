@@ -1,0 +1,116 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{ifthen}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usepackage{caption}
+\usepackage{background}
+\usepackage{float}
+\restylefloat{table}
+
+\usetikzlibrary{arrows,automata,calc,positioning}
+
+\newcommand{\task}[2]{\par \noindent \textbf{{#1}.} \hspace{3pt} #2 \vspace{10pt}}
+\newcommand{\solution}{\vspace{10pt}}
+\newcommand{\pipesep}{\hspace{3pt} \vert \hspace{3pt}}
+
+\newenvironment{subtasklist}[0]{\begin{enumerate}[label=(\alph*)]}{\end{enumerate}}
+\newenvironment{mysolution}[1]{
+	\par \textbf{Riešenie} \newline
+	\ifthenelse{\equal{#1}{subtasks}}{\begin{enumerate}[label=(\alph*)]}
+			{\begin{enumerate}[label={}] \item}
+}{\end{enumerate} \newpage}
+\newcommand{\subtask}{\item}
+
+\SetBgContents{
+		\parbox{0.4\textwidth}{
+			\raggedleft
+				Marek Milkovič \\
+				\texttt{xmilko01}
+		}
+}
+\SetBgScale{0.75}
+\SetBgOpacity{1}
+\SetBgAngle{0}
+\SetBgColor{black}
+\SetBgPosition{current page.north east}
+\SetBgVshift{-0.8cm}
+\SetBgHshift{-4.5cm}
+ 
+\begin{document}
+ 
+\title{TIN 2015/2016: Úloha 4}
+\author{Marek Milkovič \\ \small\texttt{xmilko01@stud.fit.vutbr.cz}}
+\maketitle
+
+\task{1}{Pomocou počiatočných funkcií a operátorov kombinácie, kompozície a primitívnej rekurzie
+vyjadrite funkciu počítajúcu tretiu odmocninu (zaokrúhlenú dolu na celé čísla):
+\begin{equation*}
+sqrt3: \mathbb{N} \to \mathbb{N}, sqrt3(x) = z \text{ také, že }z^{3} \le x \land (z+1)^{3} > x
+\end{equation*}
+Je možné použiť funkcie $plus(x,y), mult(x,y), monus(x,y)$ a $eq(x,y)$ definované v predáškach.
+Okrem nich však nepoužívajte žiadne ďalšie funkcie zavedené na prednáškach mimo funkcie počiatočné.
+Nepoužívajte zjednodušenú syntax zápisu funkcií -- dodržte presne definičný tvar operátorov
+kombinácie, kompozície a primitívnej rekurzie.}
+
+\begin{mysolution}
+
+TODO
+\end{mysolution}
+
+\task{2}{Podľa dôkazu vety 11.4 z prednášok je každý výpočetný proces vykonávaný TS vyčíslením
+parciálnej funkcie $f(w)$ v tomto dôkaze. Vyčíslite túto funkciu pre stroj $M_{2}$ zobrazený
+na obrázku 1 a slowo $w = ab$.
+
+Vyčíslenie funkcie $step$ na jednotlivé konfigurácie TS nie je treba rozpisovať do detailov.
+Rozpíšte iba vyčíslenie funkcie $cursym$ pre každú konfiguráciu, na ktorú budete aplikovať $step$,
+a následne môžete zapísať priamo výsledok funkcie $step$ ako $step(w_{i},p_{i},n_{i}) =
+(w_{i+1},p_{i+1},n_{i+1})$. Rovnako tak nie je potrebné znovu vyčíslovať funkcie, ktorých
+hodnoty už máte spočítané (jedná sa predovšetkým o funkciu $step$ na danej konfigurácií).
+
+\begin{figure}[!h]
+\centering
+\begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
+\node[state, initial, initial text=] (q0) {};
+\node[state, right of = q0] (q1) {};
+\node[state, right of = q1] (q2) {};
+\node[state, accepting, below of = q2] (q3) {};
+
+\path (q0) edge node[above]{$\Delta/R$} (q1);
+\path (q1) edge node[above]{$a/R$} (q2);
+\path (q2) edge[loop above] node[above]{$b/R$} (q2);
+\path (q2) edge node[left]{$\Delta/R$} (q3);
+\end{tikzpicture}
+\caption{Stroj $M_{2}$}
+\end{figure}}
+
+\begin{mysolution}
+
+TODO
+\end{mysolution}
+
+\task{3}{Dokážte, že pre každý jazyk $L \in \mathcal{L}_{2}$ platí, že $L \in \emph{NTIME}(n)$.}
+
+\begin{mysolution}
+
+TODO
+\end{mysolution}
+
+\task{4}{Klub turistov plánuje vyznačiť v horách zimné turistické trasy. Každá trasa začína a končí
+v nejakom \emph{rozcestí} a prechádza cez niekoľko ďalších rozcestí. Každá trasa bude označená
+jednou z $k$ farieb a klub by rád vyznačil trasy tak, aby sa v žiadnom rozcestí nestretli
+dve trasy označené rovnakou farbou.
+
+Dokážte redukciou z niektorého známeho NP-ťažkého problému, že problém
+\emph{"postačuje k farieb"} je NP-ťažký.}
+
+\begin{mysolution}
+
+TODO
+\end{mysolution}
+\end{document}
