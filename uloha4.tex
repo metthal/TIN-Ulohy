@@ -60,9 +60,12 @@ kombinácie, kompozície a primitívnej rekurzie.}
 
 \begin{mysolution}
 
+\vspace{-1cm}
 \begin{align*}
-	sqrt3(0) &= 0 \\
-	sqrt3(x+1) &= plus(sqrt(x), eq(x, mult(\sigma(sqrt(x)),mult(\sigma(sqrt(x)), \sigma(sqrt(x)))))) \\
+	pow3(x) &= mult \circ (\pi_{1}^{1}(x) \times mult \circ (\pi_{1}^{1}(x) \times \pi_{1}^{1}(x))) \\
+	\\
+	sqrt3(0) &= \xi() \\
+	sqrt3(x+1) &= plus \circ (\pi_{2}^{2}(x,sqrt(x)) \times (eq \circ (\pi_{1}^{2}(x,sqrt(x)) \times (pow3 \circ \sigma \circ \pi_{2}^{2}(x,sqrt(x)))))) \\
 \end{align*}
 \end{mysolution}
 
@@ -79,10 +82,10 @@ hodnoty už máte spočítané (jedná sa predovšetkým o funkciu $step$ na dan
 \begin{figure}[!h]
 \centering
 \begin{tikzpicture}[node distance = 2.5cm, ->, >=stealth, line width=1pt]
-\node[state, initial, initial text=] (q0) {};
-\node[state, right of = q0] (q1) {};
-\node[state, right of = q1] (q2) {};
-\node[state, accepting, below of = q2] (q3) {};
+\node[state, initial, initial text=] (q0) {$q_{1}$};
+\node[state, right of = q0] (q1) {$q_{2}$};
+\node[state, right of = q1] (q2) {$q_{3}$};
+\node[state, accepting, below of = q2] (q3) {$q_{4}$};
 
 \path (q0) edge node[above]{$\Delta/R$} (q1);
 \path (q1) edge node[above]{$a/R$} (q2);
@@ -94,7 +97,40 @@ hodnoty už máte spočítané (jedná sa predovšetkým o funkciu $step$ na dan
 
 \begin{mysolution}
 
-TODO
+\begin{align*}
+	&q_{1} \mapsto 1 & q_{3} \mapsto 3& \\
+	&q_{2} \mapsto 2 & q_{4} \mapsto 0&
+\end{align*}
+\begin{align*}
+	&\Delta \mapsto 0 & a \mapsto 1 && b \mapsto 2&
+\end{align*}
+\begin{align*}
+	w_{0} &= \Delta a b \Delta^{\omega} \approx 210_{3} \\
+	p_{0} &= q_{1} \approx 1 \\
+	n_{0} &= 1
+\end{align*}
+\begin{flalign*}
+	cursym(w_{0},p_{0},n_{0}) &= cursym(210_{3},1,1)
+		= quo(210_{3}, 3^{0})\ \dot{-}\ mult(3, quo(210_{3}, 3^{1})) = \\
+		&= 210_{3}\ \dot{-}\ mult(3, 21_{3}) = 210_{3}\ \dot{-}\ 210_{3} = 0 \\
+	step(w_{0},p_{0},n_{0}) &= step(210_{3},1,1) = (210_{3},2,2) \\
+	\\
+	cursym(w_{1},p_{1},n_{1}) &= cursym(210_{3},2,2)
+		= quo(210_{3}, 3^{1})\ \dot{-}\ mult(3,quo(210_{3},3^{2})) = \\
+		&= 21_{3}\ \dot{-}\ mult(3, 2_{3}) = 21_{3}\ \dot{-}\ 20_{3} = 1 \\
+	step(w_{1},p_{1},n_{1}) &= step(210_{3},2,2) = (210_{3},3,3) \\
+\end{flalign*}
+\begin{flalign*}
+	cursym(w_{2},p_{2},n_{2}) &= cursym(210_{3},3,3)
+		= quo(210_{3}, 3^{2})\ \dot{-}\ mult(3,quo(210_{3},3^{3})) = \\
+		&= 2_{3}\ \dot{-}\ mult(3, 0_{3}) = 2_{3}\ \dot{-}\ 0_{3} = 2 \\
+	step(w_{2},p_{2},n_{2}) &= step(210_{3},3,3) = (210_{3},3,4) \\
+	\\
+	cursym(w_{3},p_{3},n_{3}) &= cursym(210_{3},3,4)
+		= quo(210_{3}, 3^{3})\ \dot{-}\ mult(3,quo(210_{3},3^{4})) = \\
+		&= 0_{3}\ \dot{-}\ mult(3, 0_{3}) = 0_{3}\ \dot{-}\ 0_{3} = 0 \\
+	step(w_{3},p_{3},n_{3}) &= step(210_{3},3,4) = (210_{3},0,5) \\
+\end{flalign*}
 \end{mysolution}
 
 \task{3}{Dokážte, že pre každý jazyk $L \in \mathcal{L}_{2}$ platí, že $L \in \emph{NTIME}(n)$.}
