@@ -150,6 +150,140 @@ Dokážte redukciou z niektorého známeho NP-ťažkého problému, že problém
 
 \begin{mysolution}
 
-TODO
+Označme problém \emph{postačuje k farieb} ako \emph{COL}. Tento problém môžeme chápať taktiež ako problém
+\emph{k-ofarbitelnosti grafu} (angl. \emph{k-graph coloring}). Jednotlivé trasy reprezentujeme uzlami v neorientovanom grafe.
+Pokiaľ sa nejaké trasy stretávajú v rovnakom rozcestí, tak budú uzly reprezentujúce tieto trasy vzájomne spojené hranami.
+Pridelenie farby uzlu v grafe potom odpovedá vyznačeniu trasy farbou.
+
+Problém \emph{COL} a jeho instancie môžeme formálne definovať nasledovne.
+\begin{equation*}
+	\emph{COL} = \{\langle(G,k)\rangle \pipesep G\text{ je graf, ktory je }k\text{-ofarbitelny}\}
+\end{equation*}
+$\langle(G,k)\rangle$ je kódom grafu $G$ a kladného čísla $k$. Graf $G = (V,E)$, chápeme ako dvojicu skladajúcu sa z množiny uzlov $V$
+a množiny hrán $E$. Množinu uzlov $V$ môžeme zakódovať ako postupnosť binárnych císel oddelených nejakým jednoznačným oddelovačom, napr. $|$. Množinu
+hrán $E$ môžeme oddeliť od uzlov jednoznačným oddelovačom, napr. $\#$ a následne kódovať hrany ako dvojice uzlov, ktoré sú vzájomne prepojené.
+
+\textbf{1. \emph{COL}$\ \in\ $\emph{NP}}\\
+Zostrojíme 2-páskový NTS $M$, ktorý bude fungovať nasledovne.
+\begin{itemize}
+	\item TS najskôr overí, či je na vstupe platná instancia \emph{COL} problému. Toto overenie spočíva v kontrole, či každý uzol
+		má pridelený jednoznačný identifikátor resp. kód. Túto kontrolu je možné vykonať so zložitosťou $O(n^{2})$ (prechod časťou vstupu
+		-- $O(n)$ a pre každý uzol, kontrola unikátnosti -- $O(n)$).
+	\item Následne prebehne
+		kontrola či každá hrana obsahuje na oboch svojich koncoch platný kód uzlu. To je možné vykonať so složitosťou $O(n^{3})$
+		(prechod časťou vstupu -- $O(n)$ a kontrola existencie uzla na jednom konci hrany -- $O(n)$).
+	\item Po úvodnej kontrole, začne proces samotného ofarbovania. Na druhú pásku sa vygeneruje pre každý uzol
+		nedeterministicky kód farby, tak aby bolo možné jednoznačne určiť, ktorý uzol ma pridelenú ktorú farbu.
+		To sa vykoná so zložitosťou $O(n)$.
+	\item Potom prebieha overenie toho, či je graf správne ofarbený, teda že žiadne dva uzly spojené priamou hranou nie sú ofarbené
+		rovnakou farbou. Kontrola je možná so zložitosťou $O(n^{2})$ (priechod každým uzlom -- $O(n)$ a kontrola uzlov, ktoré
+		sú s ním priamo spojené -- $O(n)$).
+\end{itemize}
+Je zjavné, že tento TS dokáže prijať jazyk problému \emph{COL} v nedeterministickom polynomiálnom čase, teda \emph{COL}$\ \in\ $\emph{NP}.
+
+\textbf{2. \emph{COL} je \emph{NP}-ťažký}\\
+Budeme postupovať polynomiálne vyčísliteľnou redukciou z problému \emph{SAT} na \emph{COL}. Redukcia bude založená
+na transformácie formule v KNF (Konjuktivnéj Normálnej Forme) na graf, ktorý bude $k$-ofarbiteľný vtedy a len vtedy,
+keď je daná formula splniteľná. $k$ bude odpovedať maximálnemu počtu literálov z ktorých sa skladajú klauzule vo formuli.
+Idea redukcie je nasledovná.
+\begin{itemize}
+	\item Farbenie grafu bude odpovedať ohodnocovaniu premenných vo formuli. Nakoľko však farieb môže existovať viacej ako booleovských hodnôť, tak iba
+		2 farby budeme reprezentovať ako hodnoty \emph{true} a \emph{false}. Zvyšné farby nás nebudú zaujímať, ale nijak nesmú ovplyvniť riešenie.
+	\item Uzly v grafe budú mať viac možných významov. Budú však existovať minimálne nasledovné uzly.
+		\begin{itemize}
+			\item Farebná paleta, ktorá sa bude skladať z $k$ uzlov, ktoré budú všetky prepojené navzájom. Dva z týchto uzlov
+				budú reprezentovať hodnoty \emph{true} a \emph{false}, resp. ich farba bude reprezentovať dané hodnoty.
+				Označme tieto uzly ako $T$ pre \emph{true} a $F$ pre \emph{false}. Zvyšné označme ako $C_{1}, ..., C_{k-2}$.
+				Nakoľko sú všetky navzájom prepojené, tak je zjavné, že každý z nich bude mať pri valídnom ofarbení jedinečnú farbu.
+			\item Uzly reprezentujúce všetky možné literály nad všetkými premennými. Tieto uzly budú vždy označené $x_{i}$ a $\overline{x_{i}}$,
+				pričom takto 2 označené uzly budú prepojené
+				\begin{itemize}
+					\item Navzájom, aby mali vždy rozdielnu farbu.
+					\item S uzlami $C_{1},..., C_{k-2}$, aby vždy nadobudli rovnakú farbu ako uzly $T$ a $F$.
+				\end{itemize}
+			\item Uzly reprezentujúce realizáciu dizjunkcie medzi literálmi v klauzuli. Nech $K$ je klauzula $x_{1} \lor ... \lor x_{m}$.
+				V takomto prípade vytvoríme $m$ uzlov, ktoré všetky navzájom prepojíme. Každý uzol reprezentujúci literál $x_{i}$, či $\overline{x_{i}}$
+				z klauzule $K$ spojíme hranou s jedným z novo vytvorených uzlov. Všetkých týchto $m$ uzlov zároveň spojíme s uzlom $T$. To z toho dôvodu, že
+				jediné ohodnotenie premenných, ktoré spôsobí nesplnitelnosť je také, kedy sa klauzula vyhodnotí ako \emph{false}. Vtedy dôjde k
+				ofarbeniu minimálne 1 novo vzniknutého uzlu na farbu rovnakú ako uzol $T$. To však nie je validné hodnotenie, pokiaľ dojde k spojeniu s
+				uzlom $T$.
+		\end{itemize}
+\end{itemize}
+Formálny popis polynomiálnej redukcie, ktorú je možné realizovať pomocou DTS, je potom nasledovný.
+\begin{itemize}
+	\item Skontroluje sa správnosť vstupnej formule a ohodnotenia premenných. Takúto kontrolu je možné vykonať
+		so zložitosťou $O(n)$ jednosmerným priechodom cez vstupný reťazec, pretože nie je potrebné robiť žiadne spätné kontroly.
+	\item Zistí sa $k$ -- maximalný počet literálov v klauzuli pomocou jednoduchého priechodu so zložitosťou $O(n)$.
+	\item Na druhej, pracovnej, páske sa vytvoria uzly a hrany farebnej palety so zložitosťou $O(1)$.
+	\item Pre každý možný literál každej premennej sa vytvorí uzol $x_{i}$ a $\overline{x_{i}}$, s tým že musí prebehnúť kontrola,
+		či už taký uzol neexistuje. Tieto 2 uzly sa prepoja hranou. To je možné so zložitosťou $O(n^{2})$.
+	\item Pre každú klauzulu sa musí vytvoriť realizácia dizjunkcie. K tomu patrí priechod cez všetky klauzule a vyhľadanie potrebných
+		uzlov k jednotlivým literálom. Zložitosť je tým pádom $O(n^{2})$.
+	\item Taktiež je potrebné vytvoriť prepojenia uzlov s uzlom $T$, čo má v optimálnom prípade zložitosť $O(n)$.
+\end{itemize}
+Je zjavné, že redukciu je možné vykonať v deterministickom polynomiálnom čase, teda je to platná polynomiálna redukcia. Problém
+\emph{COL} je teda \emph{NP}-ťažký. Nakoľko \emph{COL}$\ \in\ \emph{NP}$ a zároveň je \emph{NP}-ťažký, tak je aj \emph{NP}-úplný.
+
+Pre názornú ukážku fungovania tejto redukcie pridávam konkrétnu instanciu \emph{SAT} problému trasnformovanú na instanciu \emph{COL} problému.
+
+\begin{align*}
+	(x_{1} \lor \overline{x_{2}} \lor x_{3}) \land (\overline{x_{1}} \lor x_{2} \lor \overline{x_{3}})
+\end{align*}
+\begin{figure}[!h]
+	\centering
+	\begin{tikzpicture}
+	\node[state] (x1) {$x_{1}$};
+	\node[state, below = 1.5cm of x1] (nx1) {$\overline{x_{1}}$};
+	\node[state, below = 0.5cm of nx1] (x2) {$x_{2}$};
+	\node[state, below = 1.5cm of x2] (nx2) {$\overline{x_{2}}$};
+	\node[state, below = 0.5cm of nx2] (x3) {$x_{3}$};
+	\node[state, below = 1.5cm of x3] (nx3) {$\overline{x_{3}}$};
+	\node[state, above right = 0.5cm and 2cm of nx2] (c1) {$C_{1}$};
+	\node[state, above right = 1cm and 2cm of c1] (T) {$T$};
+	\node[state, below right = 1cm and 2cm of c1] (F) {$F$};
+	\node[state, above left = 4cm and 0.5cm of c1] (or11) {};
+	\node[state, above right = 0.5cm and 1cm of or11] (or12) {};
+	\node[state, below right = 0.5cm and 1cm of or11] (or13) {};
+	\node[state, below left = 4cm and 0.5cm of c1] (or21) {};
+	\node[state, above right = 0.5cm and 1cm of or21] (or22) {};
+	\node[state, below right = 0.5cm and 1cm of or21] (or23) {};
+
+	\path[line width = 1pt] (x1) edge (nx1);
+	\path[line width = 1pt] (x2) edge (nx2);
+	\path[line width = 1pt] (x3) edge (nx3);
+	\path[line width = 1pt] (x1) edge (c1);
+	\path[line width = 1pt] (x2) edge (c1);
+	\path[line width = 1pt] (x3) edge (c1);
+	\path[line width = 1pt] (nx1) edge (c1);
+	\path[line width = 1pt] (nx2) edge (c1);
+	\path[line width = 1pt] (nx3) edge (c1);
+	\path[line width = 1pt] (c1) edge (T);
+	\path[line width = 1pt] (c1) edge (F);
+	\path[line width = 1pt] (T) edge (F);
+
+	\path[line width = 1pt] (or11) edge (or12);
+	\path[line width = 1pt] (or11) edge (or13);
+	\path[line width = 1pt] (or12) edge (or13);
+	\path[line width = 1pt, bend right = 25] (T) edge (or11);
+	\path[line width = 1pt, bend right = 40] (T) edge (or12);
+	\path[line width = 1pt] (T) edge (or13);
+
+	\path[line width = 1pt] (or11) edge (x1);
+	\path[line width = 1pt] (or12) edge (nx2);
+	\path[line width = 1pt] (or13) edge (x3);
+	\path[line width = 1pt] (or21) edge[bend left = 60] (nx1);
+	\path[line width = 1pt] (or22) edge (x2);
+	\path[line width = 1pt] (or23) edge (nx3);
+
+	\path[line width = 1pt] (or21) edge (or22);
+	\path[line width = 1pt] (or21) edge (or23);
+	\path[line width = 1pt] (or22) edge (or23);
+	\path[line width = 1pt] (T) edge (or21);
+	\path[line width = 1pt] (T) edge (or22);
+	\path[line width = 1pt] (T) edge (or23);
+	\end{tikzpicture}
+\end{figure}
+
+
 \end{mysolution}
 \end{document}
